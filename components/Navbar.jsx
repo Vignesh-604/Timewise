@@ -65,7 +65,7 @@ export default function Navbar() {
                     <NavigationLink href="/" className="flex items-center">
                         <div className="relative w-32 h-16">
                             <Image
-                                src="/logo.jpeg"
+                                src="/logo.png"
                                 alt="Timewise Logo"
                                 fill
                                 className="object-contain"

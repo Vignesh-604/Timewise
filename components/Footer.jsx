@@ -16,7 +16,7 @@ export default function Footer() {
                         <div className="flex items-center mb-4">
                             <div className="relative w-32 h-16">
                                 <Image
-                                    src="/logo.jpeg"
+                                    src="/logo.png"
                                     alt="Timewise Logo"
                                     fill
                                     className="object-contain"

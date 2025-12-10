@@ -145,7 +145,7 @@ export default function RegisterPage() {
                 >
                     <Link href="/" className="flex items-center justify-center mb-8">
                         <div className="relative w-48 h-24">
-                            <Image src="/logo.jpeg" alt="Logo" fill className="object-contain" />
+                            <Image src="/logo.png" alt="Logo" fill className="object-contain" />
                         </div>
                     </Link>
 
