@@ -5,7 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Search, User, LogOut } from 'lucide-react';
+import { User, LogOut } from 'lucide-react';
+import NavigationLink from './NavigationLink';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -58,10 +59,10 @@ export default function Navbar() {
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'
                 }`}
         >
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-6">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center">
+                    <NavigationLink href="/" className="flex items-center">
                         <div className="relative w-32 h-16">
                             <Image
                                 src="/logo.jpeg"
@@ -70,17 +71,35 @@ export default function Navbar() {
                                 className="object-contain"
                             />
                         </div>
-                    </Link>
+                    </NavigationLink>
 
-                    {/* Search Bar */}
-                    <div className="hidden md:flex flex-1 max-w-md mx-8">
-                        <div className="relative w-full">
-                            <input
-                                type="text"
-                                placeholder="Search for watches..."
-                                className="w-full px-4 py-2 pl-10 bg-gray-100 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-amber-400 focus:bg-white transition-all"
-                            />
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    {/* Categories - Centered */}
+                    <div className="hidden md:flex flex-1 justify-center mx-8">
+                        <div className="flex items-center gap-4">
+                            <NavigationLink href="/category/classic" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Classic
+                            </NavigationLink>
+                            <NavigationLink href="/category/luxury" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Luxury
+                            </NavigationLink>
+                            <NavigationLink href="/category/leather" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Leather
+                            </NavigationLink>
+                            <NavigationLink href="/category/sports" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Sports
+                            </NavigationLink>
+                            <NavigationLink href="/category/kids" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Kids
+                            </NavigationLink>
+                            <NavigationLink href="/category/metal" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Metal
+                            </NavigationLink>
+                            <NavigationLink href="/category/men" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Men
+                            </NavigationLink>
+                            <NavigationLink href="/category/women" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
+                                Women
+                            </NavigationLink>
                         </div>
                     </div>
 
@@ -91,15 +110,12 @@ export default function Navbar() {
                             <div className="text-sm text-gray-500">...</div>
                         ) : user ? (
                             <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-2">
-                                    <User className="w-5 h-5 text-gray-600" />
-                                    <span className="text-sm text-gray-700 hidden md:block">
-                                        Hi, {user.name.split(' ')[0]}
-                                    </span>
-                                </div>
+                                <span className="text-base font-semibold text-gray-700 hidden md:block">
+                                    Hello, {user.name.split(' ')[0]} 👋
+                                </span>
                                 <button
                                     onClick={handleLogout}
-                                    className="flex items-center gap-1 px-4 py-2 bg-gray-900 text-white text-sm rounded-full hover:bg-gray-800 transition-colors border border-gray-900"
+                                    className="flex items-center gap-1 px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-full hover:bg-gray-800 transition-colors border border-gray-900"
                                 >
                                     <LogOut className="w-4 h-4" />
                                     <span className="hidden md:inline">Logout</span>
@@ -107,18 +123,18 @@ export default function Navbar() {
                             </div>
                         ) : (
                             <div className="flex items-center gap-2">
-                                <Link
+                                <NavigationLink
                                     href="/login"
-                                    className="px-4 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors border border-gray-300 rounded-full"
+                                    className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-all duration-300 border border-gray-300 rounded-full hover:border-amber-400 hover:bg-gradient-to-r hover:from-amber-50 hover:to-amber-100"
                                 >
                                     Login
-                                </Link>
-                                <Link
+                                </NavigationLink>
+                                <NavigationLink
                                     href="/register"
-                                    className="px-4 py-2 bg-amber-500 text-white text-sm rounded-full hover:bg-amber-600 transition-colors border border-gray-900"
+                                    className="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-sm font-semibold rounded-full hover:from-amber-600 hover:to-amber-700 transition-all duration-300 border border-gray-900 shadow-md hover:shadow-lg transform hover:scale-105"
                                 >
                                     Register
-                                </Link>
+                                </NavigationLink>
                             </div>
                         )}
                     </div>

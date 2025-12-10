@@ -5,14 +5,39 @@ import { hashPassword } from '@/lib/auth';
 
 export async function POST(request) {
     try {
-        await connectDB();
+        try {
+            await connectDB();
+        } catch (dbError) {
+            console.error('Database connection error:', dbError);
+            return NextResponse.json(
+                { success: false, message: 'Database connection failed. Please check your MongoDB configuration.' },
+                { status: 500 }
+            );
+        }
 
-        const { name, email, password } = await request.json();
+        const { name, email, password, age, city, phone } = await request.json();
 
         // Validation
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !age || !city || !phone) {
             return NextResponse.json(
                 { success: false, message: 'Please provide all required fields' },
+                { status: 400 }
+            );
+        }
+
+        // Age validation
+        const ageNum = parseInt(age);
+        if (isNaN(ageNum) || ageNum < 18 || ageNum > 24) {
+            return NextResponse.json(
+                { success: false, message: 'Age must be between 18 and 24' },
+                { status: 400 }
+            );
+        }
+
+        // Phone validation
+        if (phone.length < 10 || !/^\d{10}$/.test(phone)) {
+            return NextResponse.json(
+                { success: false, message: 'Please enter a valid 10-digit phone number' },
                 { status: 400 }
             );
         }
@@ -41,6 +66,9 @@ export async function POST(request) {
             name,
             email,
             password: hashedPassword,
+            age: ageNum,
+            city,
+            phone,
         });
 
         return NextResponse.json(

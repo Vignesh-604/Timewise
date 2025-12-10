@@ -2,8 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import NavigationLink from './NavigationLink';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
 import { formatPrice } from '@/data/watches';
+import { getWatchImage } from '@/lib/imageHelper';
 
 export default function ProductCard({ watch, index = 0 }) {
     const discountedPrice = watch.price;
@@ -11,21 +13,26 @@ export default function ProductCard({ watch, index = 0 }) {
     const discount = watch.discount;
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            whileHover={{ y: -5 }}
-            className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer"
-        >
+        <NavigationLink href={`/watch/${watch.id}`}>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer"
+            >
             {/* Image Container */}
             <div className="relative aspect-square overflow-hidden bg-gray-50">
                 <Image
-                    src={watch.image}
+                    src={getWatchImage(watch.id, watch.image)}
                     alt={watch.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                        // Fallback to stock image on error
+                        e.target.src = 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400';
+                    }}
                 />
 
                 {/* Discount Badge */}
@@ -109,5 +116,6 @@ export default function ProductCard({ watch, index = 0 }) {
                 )}
             </div>
         </motion.div>
+        </NavigationLink>
     );
 }

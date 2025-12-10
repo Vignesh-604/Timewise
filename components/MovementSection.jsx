@@ -10,7 +10,7 @@ const movements = [
         name: 'Mechanical',
         description: 'Traditional craftsmanship with intricate movements',
         icon: Settings,
-        image: 'https://images.unsplash.com/photo-1594534475808-b18fc33b045e?w=500',
+        image: '/multiple-watches.jpeg',
     },
     {
         id: 2,
@@ -24,7 +24,7 @@ const movements = [
 export default function MovementSection() {
     return (
         <section className="py-16 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-6">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

@@ -21,7 +21,7 @@ const features = [
 export default function FeaturesBar() {
     return (
         <section className="py-12 bg-white">
-            <div className="max-w-5xl mx-auto px-4">
+            <div className="max-w-5xl mx-auto px-6">
                 <div className="grid grid-cols-3 gap-8">
                     {features.map((feature, index) => {
                         const IconComponent = feature.icon;

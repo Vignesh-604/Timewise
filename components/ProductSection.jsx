@@ -7,7 +7,7 @@ import ProductCard from './ProductCard';
 export default function ProductSection({ title, subtitle, products, viewAllLink = '#', bgColor = 'bg-white' }) {
     return (
         <section className={`py-12 ${bgColor}`}>
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-6">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

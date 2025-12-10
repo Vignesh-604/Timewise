@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 function LoginForm() {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -17,6 +18,7 @@ function LoginForm() {
     useEffect(() => {
         if (searchParams.get('registered') === 'true') {
             setSuccessMessage('Registration successful! Please login.');
+            toast.success('Registration successful! Please login.');
         }
     }, [searchParams]);
 
@@ -37,9 +39,16 @@ function LoginForm() {
 
             if (!res.ok) {
                 setError(data.message || 'Login failed');
+                toast.error(data.message || 'Login failed');
                 setLoading(false);
                 return;
             }
+
+            // Show welcome back toast
+            const userName = data.user?.name || 'User';
+            toast.success(`Welcome back, ${userName.split(' ')[0]}! 👋`, {
+                duration: 4000,
+            });
 
             router.push('/');
             router.refresh();
@@ -55,8 +64,8 @@ function LoginForm() {
             animate={{ opacity: 1, x: 0 }}
             className="max-w-md w-full"
         >
-            <Link href="/" className="flex items-center mb-8">
-                <div className="relative w-32 h-16">
+            <Link href="/" className="flex items-center justify-center mb-8">
+                <div className="relative w-48 h-24">
                     <Image src="/logo.jpeg" alt="Logo" fill className="object-contain" />
                 </div>
             </Link>

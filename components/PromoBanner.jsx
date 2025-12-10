@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function PromoBanner() {
     return (
-        <section className="py-20 px-4 bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800">
+        <section className="py-20 px-6 bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800">
             <div className="max-w-7xl mx-auto">
                 <div className="grid md:grid-cols-2 gap-8">
                     <motion.div

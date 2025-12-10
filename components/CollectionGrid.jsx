@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
+import NavigationLink from './NavigationLink';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const collections = [
@@ -62,7 +62,7 @@ export default function CollectionGrid() {
 
     return (
         <section className="py-16 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-6">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ export default function CollectionGrid() {
                             }}
                         >
                             {collections.map((collection, index) => (
-                                <Link
+                                <NavigationLink
                                     key={collection.id}
                                     href={getCategoryLink(collection)}
                                     className="flex-shrink-0"
@@ -139,7 +139,7 @@ export default function CollectionGrid() {
                                             </div>
                                         </div>
                                     </motion.div>
-                                </Link>
+                                </NavigationLink>
                             ))}
                         </div>
                     </div>

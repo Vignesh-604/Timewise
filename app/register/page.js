@@ -5,12 +5,51 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+const maharashtraCities = [
+    'Mumbai',
+    'Pune',
+    'Nagpur',
+    'Nashik',
+    'Aurangabad',
+    'Solapur',
+    'Thane',
+    'Kalyan',
+    'Vasai-Virar',
+    'Navi Mumbai',
+    'Sangli',
+    'Jalgaon',
+    'Akola',
+    'Latur',
+    'Dhule',
+    'Ahmednagar',
+    'Ichalkaranji',
+    'Parbhani',
+    'Panvel',
+    'Yavatmal',
+    'Satara',
+    'Beed',
+    'Kamptee',
+    'Gondia',
+    'Barshi',
+    'Achalpur',
+    'Osmanabad',
+    'Nandurbar',
+    'Wardha',
+    'Udgir',
+    'Hinganghat',
+];
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
+        age: '',
+        city: '',
+        phone: '',
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,6 +59,26 @@ export default function RegisterPage() {
         e.preventDefault();
         setError('');
         setLoading(true);
+
+        // Validation
+        const age = parseInt(formData.age);
+        if (age < 18 || age > 24) {
+            setError('Age must be between 18 and 24');
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.city) {
+            setError('Please select a city');
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.phone || formData.phone.length < 10) {
+            setError('Please enter a valid phone number');
+            setLoading(false);
+            return;
+        }
 
         try {
             const res = await fetch('/api/auth/register', {
@@ -32,11 +91,43 @@ export default function RegisterPage() {
 
             if (!res.ok) {
                 setError(data.message || 'Registration failed');
+                toast.error(data.message || 'Registration failed');
                 setLoading(false);
                 return;
             }
 
-            router.push('/login?registered=true');
+            // Auto-login after registration
+            try {
+                const loginRes = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: formData.password,
+                    }),
+                });
+
+                const loginData = await loginRes.json();
+
+                if (loginRes.ok) {
+                    // Show welcome toast
+                    toast.success(`Welcome to Timewise, ${formData.name}! 🎉`, {
+                        duration: 4000,
+                    });
+
+                    // Navigate to home page
+                    router.push('/');
+                    router.refresh();
+                } else {
+                    // Registration successful but auto-login failed
+                    toast.success('Registration successful! Please login.');
+                    router.push('/login');
+                }
+            } catch (loginErr) {
+                // Registration successful but auto-login failed
+                toast.success('Registration successful! Please login.');
+                router.push('/login');
+            }
         } catch (err) {
             setError('An error occurred. Please try again.');
             setLoading(false);
@@ -52,8 +143,8 @@ export default function RegisterPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="max-w-md w-full"
                 >
-                    <Link href="/" className="flex items-center mb-8">
-                        <div className="relative w-32 h-16">
+                    <Link href="/" className="flex items-center justify-center mb-8">
+                        <div className="relative w-48 h-24">
                             <Image src="/logo.jpeg" alt="Logo" fill className="object-contain" />
                         </div>
                     </Link>
@@ -68,30 +159,79 @@ export default function RegisterPage() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
-                                placeholder="John Doe"
-                                required
-                            />
+                        {/* Row 1: Name and Email */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input
+                                    type="text"
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                                    placeholder="John Doe"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                                    placeholder="john@example.com"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input
-                                type="email"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
-                                placeholder="john@example.com"
-                                required
-                            />
+                        {/* Row 2: Age, City, Phone */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                                <input
+                                    type="number"
+                                    value={formData.age}
+                                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                                    placeholder="ex. 21"
+                                    min="18"
+                                    max="24"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                <select
+                                    value={formData.city}
+                                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all bg-white"
+                                    required
+                                >
+                                    <option value="">Select city</option>
+                                    {maharashtraCities.map((city) => (
+                                        <option key={city} value={city}>
+                                            {city}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                                    placeholder="9876543210"
+                                    pattern="[0-9]{10}"
+                                    required
+                                />
+                                <p className="text-xs text-gray-500 mt-1">10 digits</p>
+                            </div>
                         </div>
 
+                        {/* Row 3: Password */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                             <input
@@ -108,9 +248,16 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
-                            {loading ? 'Creating Account...' : 'Register'}
+                            {loading ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Creating Account...
+                                </>
+                            ) : (
+                                'Register'
+                            )}
                         </button>
                     </form>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import NavigationLink from './NavigationLink';
 import { User, Users, Baby, Watch, Settings, Heart, Sparkles, Shirt, Activity } from 'lucide-react';
 
 const categories = [
@@ -18,12 +18,12 @@ const categories = [
 export default function CategoryBar() {
     return (
         <section className="bg-white border-b border-gray-200">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-6">
                 <div className="flex items-center justify-center gap-8 py-4 overflow-x-auto">
                     {categories.map((category, index) => {
                         const IconComponent = category.icon;
                         return (
-                            <Link key={category.id} href={`/category/${category.id}`}>
+                            <NavigationLink key={category.id} href={`/category/${category.id}`}>
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -37,7 +37,7 @@ export default function CategoryBar() {
                                         {category.name}
                                     </span>
                                 </motion.div>
-                            </Link>
+                            </NavigationLink>
                         );
                     })}
                 </div>

@@ -6,7 +6,7 @@ import { promoBanners } from '@/data/watches';
 export default function PromoBanners() {
     return (
         <section className="py-8 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-6">
                 <div className="grid md:grid-cols-2 gap-4">
                     {promoBanners.map((banner, index) => (
                         <motion.div

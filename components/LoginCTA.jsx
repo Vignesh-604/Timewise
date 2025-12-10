@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function LoginCTA() {
     return (
         <section className="py-16 bg-amber-50">
-            <div className="max-w-2xl mx-auto px-4 text-center">
+            <div className="max-w-2xl mx-auto px-6 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
