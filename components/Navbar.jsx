@@ -4,15 +4,27 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { User, LogOut } from 'lucide-react';
+import { useNavigation } from '@/contexts/NavigationContext';
 import NavigationLink from './NavigationLink';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [user, setUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { user, setUser, isAuthLoading, startNavigation, setIsAuthLoading } = useNavigation();
     const router = useRouter();
+    const pathname = usePathname();
+
+    const categories = [
+        { href: '/category/classic', label: 'Classic' },
+        { href: '/category/luxury', label: 'Luxury' },
+        { href: '/category/leather', label: 'Leather' },
+        { href: '/category/sports', label: 'Sports' },
+        { href: '/category/kids', label: 'Kids' },
+        { href: '/category/metal', label: 'Metal' },
+        { href: '/category/men', label: 'Men' },
+        { href: '/category/women', label: 'Women' },
+    ];
 
     useEffect(() => {
         const handleScroll = () => {
@@ -23,32 +35,18 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    useEffect(() => {
-        fetchUser();
-    }, []);
-
-    const fetchUser = async () => {
-        try {
-            const res = await fetch('/api/auth/me');
-            if (res.ok) {
-                const data = await res.json();
-                setUser(data.user);
-            }
-        } catch (error) {
-            console.error('Error fetching user:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleLogout = async () => {
         try {
+            setIsAuthLoading(true);
+            startNavigation('/'); // Show overlay
             await fetch('/api/auth/logout', { method: 'POST' });
             setUser(null);
             router.push('/');
             router.refresh();
         } catch (error) {
             console.error('Logout error:', error);
+        } finally {
+            setIsAuthLoading(false);
         }
     };
 
@@ -74,39 +72,28 @@ export default function Navbar() {
                     </NavigationLink>
 
                     {/* Categories - Centered */}
+                    {/* Categories - Centered */}
                     <div className="hidden md:flex flex-1 justify-center mx-8">
                         <div className="flex items-center gap-4">
-                            <NavigationLink href="/category/classic" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Classic
-                            </NavigationLink>
-                            <NavigationLink href="/category/luxury" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Luxury
-                            </NavigationLink>
-                            <NavigationLink href="/category/leather" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Leather
-                            </NavigationLink>
-                            <NavigationLink href="/category/sports" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Sports
-                            </NavigationLink>
-                            <NavigationLink href="/category/kids" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Kids
-                            </NavigationLink>
-                            <NavigationLink href="/category/metal" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Metal
-                            </NavigationLink>
-                            <NavigationLink href="/category/men" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Men
-                            </NavigationLink>
-                            <NavigationLink href="/category/women" className="text-sm font-medium text-gray-700 hover:text-amber-600 transition-colors">
-                                Women
-                            </NavigationLink>
+                            {categories.map((category) => (
+                                <NavigationLink
+                                    key={category.href}
+                                    href={category.href}
+                                    className={`text-sm font-medium transition-colors ${pathname === category.href
+                                        ? 'text-amber-500 font-bold'
+                                        : 'text-gray-700 hover:text-amber-600'
+                                        }`}
+                                >
+                                    {category.label}
+                                </NavigationLink>
+                            ))}
                         </div>
                     </div>
 
                     {/* Right Actions */}
                     <div className="flex items-center space-x-4">
                         {/* User */}
-                        {isLoading ? (
+                        {isAuthLoading ? (
                             <div className="text-sm text-gray-500">...</div>
                         ) : user ? (
                             <div className="flex items-center gap-3">

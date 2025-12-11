@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const testimonials = [
     {
@@ -51,7 +51,24 @@ const testimonials = [
 
 export default function Testimonials() {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const itemsPerView = 2;
+    const [itemsPerView, setItemsPerView] = useState(1);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setItemsPerView(2);
+            } else {
+                setItemsPerView(1);
+            }
+        };
+
+        // Initial check
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const maxIndex = Math.max(0, testimonials.length - itemsPerView);
 
     const nextTestimonial = () => {
@@ -94,18 +111,18 @@ export default function Testimonials() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="mb-12"
+                    className="mb-12 text-center"
                 >
                     <h2 className="text-2xl md:text-3xl font-bold text-gray-900 uppercase tracking-wide">
                         Testimonials
                     </h2>
-                    <div className="w-16 h-1 bg-amber-500 mt-3"></div>
+                    <div className="w-16 h-1 bg-amber-500 mt-3 mx-auto"></div>
                 </motion.div>
 
                 {/* Testimonials Carousel */}
                 <div className="relative">
                     <div className="overflow-hidden">
-                        <div 
+                        <div
                             className="flex gap-8 transition-transform duration-300 ease-in-out"
                             style={{
                                 transform: `translateX(calc(-${currentIndex * (100 / itemsPerView)}% - ${currentIndex * 2}rem))`
@@ -115,7 +132,7 @@ export default function Testimonials() {
                                 <div
                                     key={testimonial.id}
                                     className="flex-shrink-0"
-                                    style={{ 
+                                    style={{
                                         width: `calc(${100 / itemsPerView}% - 1rem)`,
                                         minWidth: `calc(${100 / itemsPerView}% - 1rem)`
                                     }}
@@ -138,9 +155,9 @@ export default function Testimonials() {
                                                 <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
                                                 <p className="text-sm text-gray-500">{testimonial.date}</p>
                                             </div>
-                                            <div className="flex items-center gap-2 bg-green-500 text-white px-2 py-1 rounded text-sm">
-                                                {renderStars(testimonial.rating)}
-                                                <span className="ml-1">{testimonial.rating}</span>
+                                            <div className="flex items-center gap-1 bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">
+                                                <span className="mr-0.5">{testimonial.rating}</span>
+                                                <Star className="w-3 h-3 fill-white text-white" />
                                             </div>
                                         </div>
 

@@ -35,8 +35,47 @@ export function NavigationProvider({ children }) {
         setIsNavigating(true);
     };
 
+    const [user, setUser] = useState(null);
+    const [isAuthLoading, setIsAuthLoading] = useState(true);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+    const checkAuth = async () => {
+        try {
+            const res = await fetch('/api/auth/me');
+            if (res.ok) {
+                const data = await res.json();
+                setUser(data.user);
+            } else {
+                setUser(null);
+            }
+        } catch (error) {
+            console.error('Error checking auth:', error);
+            setUser(null);
+        } finally {
+            setIsAuthLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        checkAuth();
+    }, []);
+
+    const openAuthModal = () => setIsAuthModalOpen(true);
+    const closeAuthModal = () => setIsAuthModalOpen(false);
+
     return (
-        <NavigationContext.Provider value={{ startNavigation, isNavigating }}>
+        <NavigationContext.Provider value={{
+            startNavigation,
+            isNavigating,
+            isAuthModalOpen,
+            isAuthLoading,
+            setIsAuthLoading,
+            openAuthModal,
+            closeAuthModal,
+            user,
+            setUser,
+            checkAuth
+        }}>
             {children}
             <AnimatePresence>
                 {isNavigating && <LoadingOverlay taglineType={taglineType} />}

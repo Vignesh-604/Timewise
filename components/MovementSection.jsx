@@ -70,8 +70,11 @@ export default function MovementSection() {
                                             <h3 className="text-2xl font-bold text-white">{movement.name}</h3>
                                         </div>
                                         <p className="text-gray-300">{movement.description}</p>
-                                        <button className="mt-4 px-6 py-2 bg-white text-gray-900 rounded-full text-sm font-medium hover:bg-amber-400 transition-colors">
-                                            Explore
+                                        <button
+                                            disabled
+                                            className="mt-4 px-6 py-2 bg-white text-gray-900 rounded-full text-sm font-medium cursor-not-allowed opacity-80"
+                                        >
+                                            Coming Soon
                                         </button>
                                     </div>
                                 </div>

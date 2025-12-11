@@ -2,12 +2,17 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { NavigationProvider } from '@/contexts/NavigationContext';
+import VisitTracker from '@/components/VisitTracker';
+import AuthModal from '@/components/AuthModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
     title: 'Timewise - Premium Watches Collection',
     description: 'Discover luxury watches for every occasion',
+    icons: {
+        icon: '/watch-icon.png',
+    },
 };
 
 export default function RootLayout({ children }) {
@@ -15,8 +20,10 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className={inter.className}>
                 <NavigationProvider>
+                    <VisitTracker />
+                    <AuthModal />
                     {children}
-                    <Toaster 
+                    <Toaster
                         position="top-right"
                         toastOptions={{
                             duration: 3000,

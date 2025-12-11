@@ -1,14 +1,41 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+
+const heroImages = [
+    'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920', // Current
+    'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=1920', // Men's Chrono
+    'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=1920', // Ceramic
+    'https://images.unsplash.com/photo-1548171915-e79a380a2a4b?w=1920'      // Women's Luxury
+];
 
 export default function Hero() {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, []);
+
     return (
         <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-primary-900 to-black mt-16">
             {/* Animated Background */}
             <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=1920')] bg-cover bg-center opacity-20"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentImageIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.4 }} // Keeping opacity low for text readability
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1 }}
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url('${heroImages[currentImageIndex]}')` }}
+                    />
+                </AnimatePresence>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
             </div>
 
             {/* Content */}

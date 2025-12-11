@@ -37,6 +37,9 @@ export default function Home() {
                 />
             </div>
 
+            {/* Movement in Time Section */}
+            <MovementSection />
+
             {/* Collection Grid */}
             <CollectionGrid />
 
@@ -50,8 +53,7 @@ export default function Home() {
                 />
             </div>
 
-            {/* Movement in Time Section */}
-            <MovementSection />
+
 
             {/* Testimonials */}
             <Testimonials />
