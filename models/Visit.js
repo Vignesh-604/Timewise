@@ -47,6 +47,7 @@ const VisitSchema = new mongoose.Schema({
         enum: ['desktop', 'mobile', 'tablet', 'unknown'],
         default: 'unknown',
     },
+    host: String, // e.g. 'localhost:3000', 'timewise.vercel.app'
 
     // Navigation History
     pages: [{
@@ -54,6 +55,13 @@ const VisitSchema = new mongoose.Schema({
         ids: { type: String }, // optional ID specific to the page e.g. product id
         visitedAt: { type: Date, default: Date.now },
         referrer: { type: String, default: '' }
+    }],
+
+    // ID-1: Events tracking for conversion
+    events: [{
+        name: { type: String, required: true },
+        data: { type: mongoose.Schema.Types.Mixed }, // Flexible data object
+        occurredAt: { type: Date, default: Date.now }
     }],
 
     // Meta

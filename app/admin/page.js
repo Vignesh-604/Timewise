@@ -7,6 +7,7 @@ import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import UTMGenerator from '@/components/admin/UTMGenerator';
 import SessionsTab from '@/components/admin/SessionsTab';
 import UsersTab from '@/components/admin/UsersTab';
+import SalesTab from '@/components/admin/SalesTab';
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState('analytics');
@@ -35,6 +36,7 @@ export default function AdminPage() {
                 {/* Content Area */}
                 <main className="p-6 md:p-8 max-w-7xl mx-auto">
                     {activeTab === 'analytics' && <AnalyticsDashboard />}
+                    {activeTab === 'sales' && <SalesTab />}
                     {activeTab === 'sessions' && <SessionsTab />}
                     {activeTab === 'users' && <UsersTab />}
                     {activeTab === 'utm-generator' && <UTMGenerator />}

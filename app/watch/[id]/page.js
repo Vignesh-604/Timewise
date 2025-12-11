@@ -11,6 +11,8 @@ import { getWatchById, formatPrice, allWatches } from '@/data/watches';
 import { getWatchReviews, calculateAverageRating, getRatingDistribution } from '@/data/reviews';
 import { getWatchImage, getWatchImages } from '@/lib/imageHelper';
 import ProductCard from '@/components/ProductCard';
+import { useCart } from '@/contexts/CartContext';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 export default function WatchDetailPage() {
     const params = useParams();
@@ -19,18 +21,11 @@ export default function WatchDetailPage() {
     const reviews = getWatchReviews(watchId);
     const [quantity, setQuantity] = useState(1);
     const [sortBy, setSortBy] = useState('recent');
+    const { addToCart } = useCart();
+    const { user, openAuthModal } = useNavigation();
 
     if (!watch) {
-        return (
-            <main className="min-h-screen bg-gray-50">
-                <Navbar />
-                <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-4">Watch not found</h1>
-                    <a href="/" className="text-amber-600 hover:text-amber-700">← Back to Home</a>
-                </div>
-                <Footer />
-            </main>
-        );
+        // ...
     }
 
     const averageRating = calculateAverageRating(reviews);
@@ -54,7 +49,7 @@ export default function WatchDetailPage() {
     const watchMainImage = getWatchImage(watch.id, watch.image);
 
     const handleQuantityChange = (delta) => {
-        setQuantity(prev => Math.max(1, prev + delta));
+        setQuantity(prev => Math.min(3, Math.max(1, prev + delta)));
     };
 
     const sortedReviews = [...reviews].sort((a, b) => {
@@ -90,7 +85,7 @@ export default function WatchDetailPage() {
     return (
         <main className="min-h-screen bg-gray-50">
             <Navbar />
-            
+
             <div className="pt-24 pb-12">
                 <div className="max-w-7xl mx-auto px-6">
                     {/* Product Detail Section */}
@@ -126,7 +121,7 @@ export default function WatchDetailPage() {
                             <div>
                                 <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">{watch.brand}</p>
                                 <h1 className="text-3xl font-bold text-gray-900 mb-4">{watch.name}</h1>
-                                
+
                                 {/* Price */}
                                 <div className="mb-6">
                                     <div className="flex items-center gap-3 mb-2">
@@ -162,7 +157,16 @@ export default function WatchDetailPage() {
                                             </button>
                                         </div>
                                     </div>
-                                    <button className="w-full bg-amber-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-amber-600 transition-colors flex items-center justify-center gap-2 border-2 border-gray-900">
+                                    <button
+                                        onClick={() => {
+                                            if (!user) {
+                                                openAuthModal();
+                                                return;
+                                            }
+                                            addToCart(watch, quantity);
+                                        }}
+                                        className="w-full bg-amber-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-amber-600 transition-colors flex items-center justify-center gap-2 border-2 border-gray-900"
+                                    >
                                         <ShoppingCart className="w-5 h-5" />
                                         ADD TO CART
                                     </button>

@@ -66,6 +66,7 @@ export function NavigationProvider({ children }) {
     return (
         <NavigationContext.Provider value={{
             startNavigation,
+            endNavigation: () => setIsNavigating(false),
             isNavigating,
             isAuthModalOpen,
             isAuthLoading,

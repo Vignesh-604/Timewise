@@ -42,6 +42,8 @@ const maharashtraCities = [
     'Hinganghat',
 ];
 
+import { useNavigation } from '@/contexts/NavigationContext';
+
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
         name: '',
@@ -54,6 +56,13 @@ export default function RegisterPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { user, isAuthLoading } = useNavigation();
+
+    useEffect(() => {
+        if (!isAuthLoading && user) {
+            router.push('/');
+        }
+    }, [user, isAuthLoading, router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

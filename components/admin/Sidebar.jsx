@@ -7,7 +7,8 @@ import {
     Menu,
     X,
     Clock,
-    Users
+    Users,
+    TrendingUp,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,6 +16,7 @@ import Link from 'next/link';
 export default function Sidebar({ activeTab, setActiveTab, isMobileOpen, setIsMobileOpen }) {
     const navItems = [
         { id: 'analytics', label: 'Analytics', icon: LayoutDashboard },
+        { id: 'sales', label: 'Sales', icon: TrendingUp },
         { id: 'sessions', label: 'Sessions', icon: Clock },
         { id: 'users', label: 'Users', icon: Users },
         { id: 'utm-generator', label: 'UTM Generator', icon: LinkIcon },

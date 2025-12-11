@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
+import { useNavigation } from '@/contexts/NavigationContext';
+
 function LoginForm() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
@@ -14,6 +16,13 @@ function LoginForm() {
     const [successMessage, setSuccessMessage] = useState('');
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { user, isAuthLoading } = useNavigation();
+
+    useEffect(() => {
+        if (!isAuthLoading && user) {
+            router.push('/');
+        }
+    }, [user, isAuthLoading, router]);
 
     useEffect(() => {
         if (searchParams.get('registered') === 'true') {

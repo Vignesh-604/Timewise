@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import { NavigationProvider } from '@/contexts/NavigationContext';
+import { CartProvider } from '@/contexts/CartContext';
 import VisitTracker from '@/components/VisitTracker';
 import AuthModal from '@/components/AuthModal';
 
@@ -20,26 +21,28 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className={inter.className}>
                 <NavigationProvider>
-                    <VisitTracker />
-                    <AuthModal />
-                    {children}
-                    <Toaster
-                        position="top-right"
-                        toastOptions={{
-                            duration: 3000,
-                            style: {
-                                background: '#363636',
-                                color: '#fff',
-                            },
-                            success: {
+                    <CartProvider>
+                        <VisitTracker />
+                        <AuthModal />
+                        {children}
+                        <Toaster
+                            position="top-right"
+                            toastOptions={{
                                 duration: 3000,
-                                iconTheme: {
-                                    primary: '#f59e0b',
-                                    secondary: '#fff',
+                                style: {
+                                    background: '#363636',
+                                    color: '#fff',
                                 },
-                            },
-                        }}
-                    />
+                                success: {
+                                    duration: 3000,
+                                    iconTheme: {
+                                        primary: '#f59e0b',
+                                        secondary: '#fff',
+                                    },
+                                },
+                            }}
+                        />
+                    </CartProvider>
                 </NavigationProvider>
             </body>
         </html>

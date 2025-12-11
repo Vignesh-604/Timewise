@@ -7,9 +7,11 @@ import { ShoppingCart, Star } from 'lucide-react';
 import { formatPrice } from '@/data/watches';
 import { getWatchImage } from '@/lib/imageHelper';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { useCart } from '@/contexts/CartContext';
 
 export default function ProductCard({ watch, index = 0 }) {
     const { user, openAuthModal } = useNavigation();
+    const { addToCart } = useCart();
     const discountedPrice = watch.price;
     const originalPrice = watch.originalPrice;
     const discount = watch.discount;
@@ -67,16 +69,12 @@ export default function ProductCard({ watch, index = 0 }) {
                             <button
                                 onClick={(e) => {
                                     e.preventDefault();
+                                    e.stopPropagation();
                                     if (!user) {
                                         openAuthModal();
                                         return;
                                     }
-                                    // Proceed to cart logic (handled by parent or unimplemented here, assuming button is just UI for now or triggers something)
-                                    // If there is actual add to cart logic, it should go here.
-                                    // For now, I'll assume the button is the trigger.
-                                    // Wait, usually ProductCard calls `addToCart` context? 
-                                    // The original code didn't have logic, just a button.
-                                    // I'll assume the user wants the INTERACTION to be blocked.
+                                    addToCart(watch);
                                 }}
                                 className="flex-1 flex items-center justify-center gap-2 bg-white text-gray-900 py-2 px-4 rounded text-sm font-medium hover:bg-amber-400 transition-colors"
                             >

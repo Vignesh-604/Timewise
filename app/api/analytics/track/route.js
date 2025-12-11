@@ -22,28 +22,36 @@ export async function POST(req) {
         let visit = await Visit.findOne({ sessionId });
 
         if (visit) {
-            // Update existing session: push new page and update lastActiveAt
-            // We check if the last page was the same to avoid duplicate rapid fires if needed,
-            // but usually we want to track all meaningful navigation.
-            await Visit.updateOne(
-                { sessionId },
-                {
-                    $push: {
-                        pages: {
-                            path: page,
-                            referrer: referrer || '',
-                            visitedAt: new Date()
-                        }
-                    },
-                    $set: {
-                        lastActiveAt: new Date(),
-                        // Update basic info if it was missing (e.g. if started on a page without user agent tracking working initially?? unlikely but safe)
-                        // Also link user if they logged in during session
-                        ...(data.userId ? { userId: data.userId } : {})
-                    }
+            // Update existing session
+            let updateQuery = {
+                $set: {
+                    lastActiveAt: new Date(),
+                    ...(data.userId ? { userId: data.userId } : {})
                 }
-            );
+            };
+
+            // ID-1: Handle Events vs Page Views
+            if (data.event) {
+                updateQuery.$push = {
+                    events: {
+                        name: data.event.name,
+                        data: data.event.data || {},
+                        occurredAt: new Date()
+                    }
+                };
+            } else {
+                updateQuery.$push = {
+                    pages: {
+                        path: page,
+                        referrer: referrer || '',
+                        visitedAt: new Date()
+                    }
+                };
+            }
+
+            await Visit.updateOne({ sessionId }, updateQuery);
         } else {
+            // New Session - Create new document
             // New Session - Create new document
 
             // Detect device type
@@ -67,6 +75,7 @@ export async function POST(req) {
                 userId: data.userId || null,
                 userAgent,
                 device,
+                host: data.host || '',
                 pages: [{
                     path: page || '/',
                     referrer: referrer || '',

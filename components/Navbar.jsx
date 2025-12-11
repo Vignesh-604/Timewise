@@ -1,17 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, LogOut } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { User, LogOut, ShoppingBag, FileText } from 'lucide-react';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { useCart } from '@/contexts/CartContext';
 import NavigationLink from './NavigationLink';
+import CartDrawer from './CartDrawer';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
-    const { user, setUser, isAuthLoading, startNavigation, setIsAuthLoading } = useNavigation();
+    const { user, setUser, isAuthLoading, startNavigation, endNavigation, setIsAuthLoading } = useNavigation();
+    const { setIsCartOpen, cartCount } = useCart();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -47,6 +50,7 @@ export default function Navbar() {
             console.error('Logout error:', error);
         } finally {
             setIsAuthLoading(false);
+            endNavigation(); // Ensure loading overlay is removed
         }
     };
 
@@ -54,8 +58,7 @@ export default function Navbar() {
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'
-                }`}
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'}`}
         >
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex justify-between items-center h-16">
@@ -71,7 +74,6 @@ export default function Navbar() {
                         </div>
                     </NavigationLink>
 
-                    {/* Categories - Centered */}
                     {/* Categories - Centered */}
                     <div className="hidden md:flex flex-1 justify-center mx-8">
                         <div className="flex items-center gap-4">
@@ -92,6 +94,32 @@ export default function Navbar() {
 
                     {/* Right Actions */}
                     <div className="flex items-center space-x-4">
+                        {/* Orders Button */}
+                        <button
+                            onClick={() => router.push('/orders')}
+                            title="My Orders"
+                            className={`flex items-center gap-2 p-2 transition-colors group ${pathname === '/orders' ? 'text-amber-500 font-bold' : 'text-gray-700 hover:text-amber-500'}`}
+                        >
+                            <FileText className={`w-6 h-6 ${pathname === '/orders' ? 'text-amber-500' : ''}`} />
+                            <span className={`hidden md:inline font-medium text-sm group-hover:text-amber-600 ${pathname === '/orders' ? 'text-amber-500' : ''}`}>Orders</span>
+                        </button>
+
+                        {/* Cart Button */}
+                        <button
+                            onClick={() => setIsCartOpen(true)}
+                            className="relative flex items-center gap-2 p-2 text-gray-700 hover:text-amber-500 transition-colors group"
+                        >
+                            <div className="relative">
+                                <ShoppingBag className="w-6 h-6" />
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </div>
+                            <span className="hidden md:inline font-medium text-sm group-hover:text-amber-600">Cart</span>
+                        </button>
+
                         {/* User */}
                         {isAuthLoading ? (
                             <div className="text-sm text-gray-500">...</div>
@@ -127,6 +155,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
+            <CartDrawer />
         </motion.nav>
     );
 }
