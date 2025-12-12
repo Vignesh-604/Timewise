@@ -66,7 +66,7 @@ export default function ProductCard({ watch, index = 0 }) {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="hidden md:block absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="flex gap-2">
                             <button
                                 onClick={(e) => {

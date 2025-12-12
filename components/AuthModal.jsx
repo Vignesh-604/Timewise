@@ -71,7 +71,7 @@ export default function AuthModal() {
                             <div className="text-sm text-gray-500">
                                 Don't have an account?{' '}
                                 <Link
-                                    href="/signup"
+                                    href="/register"
                                     onClick={closeAuthModal}
                                     className="font-semibold text-amber-600 hover:text-amber-700"
                                 >

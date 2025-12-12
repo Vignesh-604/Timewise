@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { User, LogOut, ShoppingCart, PackageCheck, Menu, X } from 'lucide-react';
+import { User, LogOut, ShoppingCart, PackageCheck, Menu, X, Info } from 'lucide-react';
 import { useNavigation } from '@/contexts/NavigationContext';
 import { useCart } from '@/contexts/CartContext';
 import NavigationLink from './NavigationLink';
@@ -80,7 +80,23 @@ export default function Navbar() {
                         </button>
 
                         {/* Logo */}
-                        <NavigationLink href="/" className="flex items-center">
+                        {/* Logo */}
+                        <Link
+                            href="/"
+                            className="flex items-center"
+                            onClick={(e) => {
+                                if (pathname === '/') {
+                                    e.preventDefault();
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                } else {
+                                    e.preventDefault();
+                                    startNavigation('/');
+                                    setTimeout(() => {
+                                        router.push('/');
+                                    }, 500);
+                                }
+                            }}
+                        >
                             <div className="relative w-32 h-16">
                                 <Image
                                     src="/logo.png"
@@ -89,7 +105,7 @@ export default function Navbar() {
                                     className="object-contain"
                                 />
                             </div>
-                        </NavigationLink>
+                        </Link>
                     </div>
 
                     {/* Categories - Centered (Desktop) */}
@@ -112,32 +128,48 @@ export default function Navbar() {
 
                     {/* Right Actions (Desktop) */}
                     <div className="hidden md:flex items-center space-x-4">
+                        {/* About Link - Icon with hover animation (Always Visible) */}
+                        <NavigationLink
+                            href="/about"
+                            className="group flex items-center gap-1 p-2 rounded-full hover:bg-amber-50 transition-all"
+                            title="About Us"
+                        >
+                            <Info className={`w-5 h-5 transition-transform group-hover:-translate-y-0.5 ${pathname === '/about' ? 'text-amber-500' : 'text-gray-500 group-hover:text-amber-600'}`} />
+                            <span className={`text-sm font-medium max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[80px] group-hover:opacity-100 transition-all duration-500 ${pathname === '/about' ? 'text-amber-500' : 'text-gray-700 group-hover:text-amber-600'}`}>
+                                About
+                            </span>
+                        </NavigationLink>
+
                         {user && (
                             <>
                                 {/* Orders Button */}
                                 <button
                                     onClick={() => router.push('/orders')}
                                     title="My Orders"
-                                    className={`flex items-center gap-2 p-2 transition-colors group ${pathname === '/orders' ? 'text-amber-500 font-bold' : 'text-gray-700 hover:text-amber-500'}`}
+                                    className="group flex items-center gap-1 p-2 rounded-full hover:bg-amber-50 transition-all"
                                 >
-                                    <PackageCheck className={`w-6 h-6 ${pathname === '/orders' ? 'text-amber-500' : ''}`} />
-                                    <span className={`hidden md:inline font-medium text-sm group-hover:text-amber-600 ${pathname === '/orders' ? 'text-amber-500' : ''}`}>Orders</span>
+                                    <PackageCheck className={`w-5 h-5 transition-transform group-hover:-translate-y-0.5 ${pathname === '/orders' ? 'text-amber-500' : 'text-gray-500 group-hover:text-amber-600'}`} />
+                                    <span className={`text-sm font-medium max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[80px] group-hover:opacity-100 transition-all duration-500 ${pathname === '/orders' ? 'text-amber-500' : 'text-gray-700 group-hover:text-amber-600'}`}>
+                                        Orders
+                                    </span>
                                 </button>
 
                                 {/* Cart Button */}
                                 <button
                                     onClick={() => setIsCartOpen(true)}
-                                    className="relative flex items-center gap-2 p-2 text-gray-700 hover:text-amber-500 transition-colors group"
+                                    className="group flex items-center gap-1 p-2 rounded-full hover:bg-amber-50 transition-all"
                                 >
-                                    <div className="relative">
-                                        <ShoppingCart className="w-6 h-6" />
+                                    <div className="relative transition-transform group-hover:-translate-y-0.5">
+                                        <ShoppingCart className="w-5 h-5 text-gray-500 group-hover:text-amber-600" />
                                         {cartCount > 0 && (
-                                            <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
+                                            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">
                                                 {cartCount}
                                             </span>
                                         )}
                                     </div>
-                                    <span className="hidden md:inline font-medium text-sm group-hover:text-amber-600">Cart</span>
+                                    <span className="text-sm font-medium max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[80px] group-hover:opacity-100 transition-all duration-500 text-gray-700 group-hover:text-amber-600">
+                                        Cart
+                                    </span>
                                 </button>
                             </>
                         )}
@@ -176,7 +208,7 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    {/* Mobile Right: Cart Only (Users usually want quick access) */}
+                    {/* Mobile Right: Cart Only */}
                     <div className="flex md:hidden items-center gap-2">
                         {user && (
                             <button
@@ -237,7 +269,7 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                {/* Sidebar Content */}
+                {/* Sidebar Content (Scrollable) */}
                 <div className="flex-1 overflow-y-auto py-4">
                     {/* Categories Section */}
                     <div className="px-6 mb-6">
@@ -262,39 +294,50 @@ export default function Navbar() {
                     <div className="border-t border-gray-100 my-2" />
 
                     {/* User Links Section */}
-                    {user && (
-                        <div className="px-6 py-4 space-y-3">
-                            <button
-                                onClick={() => {
-                                    setIsCartOpen(true);
-                                    setIsSidebarOpen(false);
-                                }}
-                                className="flex items-center gap-3 w-full py-2 text-sm font-medium text-gray-700 hover:text-amber-600"
-                            >
-                                <ShoppingCart className="w-5 h-5" />
-                                Cart
-                                {cartCount > 0 && (
-                                    <span className="ml-auto bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </button>
-                            <button
-                                onClick={() => {
-                                    router.push('/orders');
-                                    setIsSidebarOpen(false);
-                                }}
-                                className={`flex items-center gap-3 w-full py-2 text-sm font-medium ${pathname === '/orders' ? 'text-amber-500' : 'text-gray-700 hover:text-amber-600'
-                                    }`}
-                            >
-                                <PackageCheck className="w-5 h-5" />
-                                My Orders
-                            </button>
-                        </div>
-                    )}
+                    <div className="px-6 py-4 space-y-3">
+                        {/* About Link Mobile */}
+                        <Link
+                            href="/about"
+                            onClick={() => setIsSidebarOpen(false)}
+                            className={`flex items-center gap-3 w-full py-2 text-sm font-medium transition-colors ${pathname === '/about' ? 'text-amber-500' : 'text-gray-700 hover:text-amber-600'}`}
+                        >
+                            <Info className="w-5 h-5" />
+                            About Us
+                        </Link>
+                        {user && (
+                            <div className="space-y-3">
+                                <button
+                                    onClick={() => {
+                                        setIsCartOpen(true);
+                                        setIsSidebarOpen(false);
+                                    }}
+                                    className="flex items-center gap-3 w-full py-2 text-sm font-medium text-gray-700 hover:text-amber-600"
+                                >
+                                    <ShoppingCart className="w-5 h-5" />
+                                    Cart
+                                    {cartCount > 0 && (
+                                        <span className="ml-auto bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
+                                            {cartCount}
+                                        </span>
+                                    )}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        router.push('/orders');
+                                        setIsSidebarOpen(false);
+                                    }}
+                                    className={`flex items-center gap-3 w-full py-2 text-sm font-medium ${pathname === '/orders' ? 'text-amber-500' : 'text-gray-700 hover:text-amber-600'
+                                        }`}
+                                >
+                                    <PackageCheck className="w-5 h-5" />
+                                    My Orders
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
-                {/* Sidebar Footer (Logout) */}
+                {/* Sidebar Footer (Logout/Login) */}
                 {user ? (
                     <div className="p-4 border-t border-gray-100 bg-gray-50">
                         <button

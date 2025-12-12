@@ -3,8 +3,13 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 export default function LoginCTA() {
+    const { user } = useNavigation();
+
+    if (user) return null;
+
     return (
         <section className="py-20 bg-gradient-to-b from-amber-50/80 to-white border-t border-amber-100">
             <div className="max-w-3xl mx-auto px-6 text-center">
@@ -22,10 +27,10 @@ export default function LoginCTA() {
                     <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 font-serif tracking-tight">
                         UNLOCK TIMELESS ELEGANCE
                     </h2>
-                    
+
                     <p className="text-gray-600 mb-10 text-lg leading-relaxed max-w-2xl">
-                        Become a member to enjoy exclusive access to new arrivals, 
-                        saves to wishlist, and seamless order tracking. 
+                        Become a member to enjoy exclusive access to new arrivals,
+                        saves to wishlist, and seamless order tracking.
                         Your perfect timepiece is just a click away.
                     </p>
 
@@ -36,7 +41,7 @@ export default function LoginCTA() {
                         >
                             LOGIN & SHOP NOW
                         </Link>
-                        
+
                         <Link
                             href="/register"
                             className="w-full sm:w-auto px-10 py-4 bg-white border-2 border-gray-200 text-gray-800 font-medium tracking-wide rounded-md hover:border-amber-600 hover:text-amber-600 transition-all duration-300 transform hover:-translate-y-0.5"

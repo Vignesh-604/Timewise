@@ -16,7 +16,7 @@ export default function Footer() {
                         <div className="flex items-center mb-4">
                             <div className="relative w-32 h-16">
                                 <Image
-                                    src="/logo-bg.jpeg"
+                                    src="/logo-white.png"
                                     alt="Timewise Logo"
                                     fill
                                     className="object-contain"
@@ -33,6 +33,7 @@ export default function Footer() {
                         <h4 className="font-semibold mb-4">Quick Links</h4>
                         <ul className="space-y-2 text-gray-400 text-sm">
                             <li><Link href="/" className="hover:text-amber-400 transition-colors">Home</Link></li>
+                            <li><Link href="/about" className="hover:text-amber-400 transition-colors">About Us</Link></li>
                             <li><Link href="#bestsellers" className="hover:text-amber-400 transition-colors">Bestsellers</Link></li>
                             <li><Link href="#new-arrivals" className="hover:text-amber-400 transition-colors">New Arrivals</Link></li>
                             <li><Link href="#automatic" className="hover:text-amber-400 transition-colors">Automatic</Link></li>

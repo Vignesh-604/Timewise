@@ -40,13 +40,18 @@ export async function POST(req) {
                     }
                 };
             } else {
-                updateQuery.$push = {
-                    pages: {
-                        path: page,
-                        referrer: referrer || '',
-                        visitedAt: new Date()
-                    }
-                };
+                // Check if page already visited in this session
+                const pageExists = visit.pages && visit.pages.some(p => p.path === page);
+
+                if (!pageExists) {
+                    updateQuery.$push = {
+                        pages: {
+                            path: page,
+                            referrer: referrer || '',
+                            visitedAt: new Date()
+                        }
+                    };
+                }
             }
 
             await Visit.updateOne({ sessionId }, updateQuery);
