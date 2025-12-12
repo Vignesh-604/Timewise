@@ -100,6 +100,7 @@ export default function CartDrawer() {
                 <>
                     {/* Backdrop */}
                     <motion.div
+                        key="cart-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.5 }}
                         exit={{ opacity: 0 }}
@@ -109,6 +110,7 @@ export default function CartDrawer() {
 
                     {/* Drawer */}
                     <motion.div
+                        key="cart-drawer"
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
@@ -161,10 +163,10 @@ export default function CartDrawer() {
                                 </div>
                             ) : (
                                 <div className="space-y-6">
-                                    {cartItems.map((item) => (
+                                    {cartItems.map((item, index) => (
                                         <motion.div
                                             layout
-                                            key={item.id}
+                                            key={`${item.id || 'item'}-${index}`}
                                             className="flex gap-4 p-4 border rounded-xl bg-gray-50"
                                         >
                                             <div className="relative w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 border">
@@ -172,6 +174,7 @@ export default function CartDrawer() {
                                                     src={getWatchImage(item.id, item.image)}
                                                     alt={item.name}
                                                     fill
+                                                    sizes="80px"
                                                     className="object-cover"
                                                 />
                                             </div>

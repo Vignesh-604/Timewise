@@ -55,47 +55,47 @@ export default function SessionsTab() {
                     <table className="w-full">
                         <thead className="bg-gray-50/50">
                             <tr>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Source / Campaign</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Landing Page</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Device</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Pages</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Time</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Source / Campaign</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Landing Page</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Device</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Pages</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Time</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {sessions.map((visit, idx) => (
                                 <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                    <td className="py-4 px-6">
+                                    <td className="py-3 md:py-4 px-3 md:px-6">
                                         <div className="flex items-center gap-2">
-                                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium capitalize 
+                                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] md:text-xs font-medium capitalize 
                                                 ${visit.utm_source === 'direct' ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'}`}>
                                                 {visit.utm_source}
                                             </span>
                                             {visit.utm_campaign !== 'none' && (
-                                                <span className="text-xs text-gray-500 capitalize" title="Campaign">
+                                                <span className="text-[10px] md:text-xs text-gray-500 capitalize" title="Campaign">
                                                     • {visit.utm_campaign.replace(/_/g, ' ')}
                                                 </span>
                                             )}
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6 text-sm text-gray-600 font-mono">
+                                    <td className="py-3 md:py-4 px-3 md:px-6 text-xs md:text-sm text-gray-600 font-mono">
                                         {visit.page}
                                     </td>
-                                    <td className="py-4 px-6">
-                                        <span className="text-sm text-gray-600 capitalize flex items-center gap-1">
+                                    <td className="py-3 md:py-4 px-3 md:px-6">
+                                        <span className="text-xs md:text-sm text-gray-600 capitalize flex items-center gap-1">
                                             {visit.device === 'mobile' && <Smartphone className="w-3 h-3" />}
                                             {visit.device === 'desktop' && <Monitor className="w-3 h-3" />}
                                             {visit.device === 'tablet' && <Tablet className="w-3 h-3" />}
                                             {visit.device}
                                         </span>
                                     </td>
-                                    <td className="py-4 px-6">
+                                    <td className="py-3 md:py-4 px-3 md:px-6">
                                         <div className="flex items-center gap-1">
-                                            <span className="text-sm font-medium text-gray-900">{visit.pagesViewed}</span>
-                                            <span className="text-xs text-gray-400">pgs</span>
+                                            <span className="text-xs md:text-sm font-medium text-gray-900">{visit.pagesViewed}</span>
+                                            <span className="text-[10px] md:text-xs text-gray-400">pgs</span>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6 text-xs text-gray-500">
+                                    <td className="py-3 md:py-4 px-3 md:px-6 text-[10px] md:text-xs text-gray-500">
                                         {new Date(visit.visitedAt).toLocaleString('en-IN', {
                                             month: 'short',
                                             day: 'numeric',

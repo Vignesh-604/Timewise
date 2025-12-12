@@ -9,21 +9,33 @@ export function CartProvider({ children }) {
     const [cartItems, setCartItems] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
 
+    const CART_STORAGE_KEY = 'timewise_cart_v2'; // Changed key to force reset old data
+
     // Load cart from local storage on mount
     useEffect(() => {
-        const storedCart = localStorage.getItem('timewise_cart');
+        const storedCart = localStorage.getItem(CART_STORAGE_KEY);
         if (storedCart) {
             try {
-                setCartItems(JSON.parse(storedCart));
+                const parsed = JSON.parse(storedCart);
+                // Additional safety check: Ensure it's an array and filter out invalid items
+                if (Array.isArray(parsed)) {
+                    // Filter out items without IDs to be extra safe
+                    const validItems = parsed.filter(item => item && item.id);
+                    setCartItems(validItems);
+                } else {
+                    // Reset if structure is invalid
+                    setCartItems([]);
+                }
             } catch (e) {
                 console.error('Failed to parse cart', e);
+                setCartItems([]);
             }
         }
     }, []);
 
     // Save cart to local storage whenever it changes
     useEffect(() => {
-        localStorage.setItem('timewise_cart', JSON.stringify(cartItems));
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
     }, [cartItems]);
 
     const trackEvent = async (eventName, eventData) => {
@@ -107,7 +119,7 @@ export function CartProvider({ children }) {
 
     const clearCart = () => {
         setCartItems([]);
-        localStorage.removeItem('timewise_cart');
+        localStorage.removeItem(CART_STORAGE_KEY);
     };
 
     const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);

@@ -43,8 +43,8 @@ export default function PreOrderModal({ isOpen, onClose, onConfirm, cartItems, t
                     {/* Content */}
                     <div className="p-6">
                         <div className="space-y-4 max-h-[60vh] overflow-y-auto mb-6">
-                            {cartItems.map((item) => (
-                                <div key={item.id} className="flex justify-between items-start py-2 border-b border-gray-100 last:border-0">
+                            {cartItems.map((item, index) => (
+                                <div key={`${item.id || 'item'}-${index}`} className="flex justify-between items-start py-2 border-b border-gray-100 last:border-0">
                                     <div>
                                         <p className="font-semibold text-gray-900">{item.name}</p>
                                         <p className="text-sm text-gray-500">Qty: {item.quantity}</p>

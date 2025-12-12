@@ -64,16 +64,14 @@ export default function AnalyticsDashboard() {
     }, [period]);
 
     const StatCard = ({ title, value, subtext, icon: Icon, color = 'bg-amber-500' }) => (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-gray-500 mb-1">{title}</p>
-                    <p className="text-3xl font-bold text-gray-900">{value}</p>
-                    {subtext && <p className="text-xs text-gray-500 mt-1">{subtext}</p>}
-                </div>
-                <div className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center`}>
-                    <Icon className="w-6 h-6 text-white" />
-                </div>
+        <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col items-start gap-3 h-full">
+            <div className={`w-10 h-10 ${color} rounded-lg flex items-center justify-center shadow-sm mb-1`}>
+                <Icon className="w-5 h-5 text-white" />
+            </div>
+            <div>
+                <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
+                <p className="text-2xl font-bold text-gray-900 tracking-tight">{value}</p>
+                {subtext && <p className="text-xs text-gray-400 mt-1">{subtext}</p>}
             </div>
         </div>
     );
@@ -168,7 +166,7 @@ export default function AnalyticsDashboard() {
             </div>
 
             {/* Stat Cards */}
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 <StatCard
                     title="Total Sessions"
                     value={analytics?.totalVisits || 0}

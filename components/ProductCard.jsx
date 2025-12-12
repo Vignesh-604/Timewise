@@ -34,6 +34,7 @@ export default function ProductCard({ watch, index = 0 }) {
                         src={imgSrc}
                         alt={watch.name}
                         fill
+                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={() => {
                             setImgSrc('https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400');
@@ -42,7 +43,7 @@ export default function ProductCard({ watch, index = 0 }) {
 
                     {/* Discount Badge */}
                     {discount > 0 && (
-                        <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-10">
+                        <div className={`absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-10 ${watch.isBestseller ? 'hidden md:block' : ''}`}>
                             {discount}% OFF
                         </div>
                     )}
@@ -115,7 +116,6 @@ export default function ProductCard({ watch, index = 0 }) {
                         <div className="flex items-center gap-1 mt-2">
                             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                             <span className="text-sm text-gray-600">{watch.rating}</span>
-                            <span className="text-xs text-gray-400">({watch.reviews} reviews)</span>
                         </div>
                     )}
 

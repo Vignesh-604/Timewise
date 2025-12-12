@@ -24,7 +24,7 @@ const collections = [
 export default function CollectionGrid() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [itemsPerView, setItemsPerView] = useState(4);
-    
+
     // Update items per view based on screen size
     useEffect(() => {
         const updateItemsPerView = () => {
@@ -36,12 +36,12 @@ export default function CollectionGrid() {
                 setItemsPerView(4);
             }
         };
-        
+
         updateItemsPerView();
         window.addEventListener('resize', updateItemsPerView);
         return () => window.removeEventListener('resize', updateItemsPerView);
     }, []);
-    
+
     const maxIndex = Math.max(0, collections.length - itemsPerView);
 
     const handlePrev = () => {
@@ -101,7 +101,7 @@ export default function CollectionGrid() {
 
                     {/* Carousel */}
                     <div className="overflow-hidden">
-                        <div 
+                        <div
                             className="flex gap-4 transition-transform duration-300 ease-in-out"
                             style={{
                                 transform: `translateX(calc(-${currentIndex * (100 / itemsPerView)}% - ${currentIndex * 1}rem))`
@@ -112,7 +112,7 @@ export default function CollectionGrid() {
                                     key={collection.id}
                                     href={getCategoryLink(collection)}
                                     className="flex-shrink-0"
-                                    style={{ 
+                                    style={{
                                         width: `calc(${100 / itemsPerView}% - ${(itemsPerView - 1) / itemsPerView * 1}rem)`,
                                         minWidth: `calc(${100 / itemsPerView}% - ${(itemsPerView - 1) / itemsPerView * 1}rem)`
                                     }}
@@ -129,6 +129,7 @@ export default function CollectionGrid() {
                                             src={collection.image}
                                             alt={collection.name}
                                             fill
+                                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                                             className="object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
                                         {/* Overlay */}

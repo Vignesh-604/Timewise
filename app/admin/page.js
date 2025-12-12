@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import Sidebar from '@/components/admin/Sidebar';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
@@ -10,15 +11,31 @@ import UsersTab from '@/components/admin/UsersTab';
 import SalesTab from '@/components/admin/SalesTab';
 
 export default function AdminPage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const [activeTab, setActiveTab] = useState('analytics');
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+    useEffect(() => {
+        const page = searchParams.get('page');
+        if (page) {
+            setActiveTab(page);
+        }
+    }, [searchParams]);
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        const params = new URLSearchParams(searchParams);
+        params.set('page', tab);
+        router.push(`/admin?${params.toString()}`);
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
             <Sidebar
                 activeTab={activeTab}
-                setActiveTab={setActiveTab}
+                setActiveTab={handleTabChange}
                 isMobileOpen={isMobileOpen}
                 setIsMobileOpen={setIsMobileOpen}
             />

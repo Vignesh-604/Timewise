@@ -69,44 +69,22 @@ export default function Testimonials() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const maxIndex = Math.max(0, testimonials.length - itemsPerView);
+    const maxIndex = testimonials.length - itemsPerView;
 
     const nextTestimonial = () => {
-        setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
+        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     };
 
     const prevTestimonial = () => {
-        setCurrentIndex((prev) => Math.max(0, prev - 1));
+        setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
     };
 
-    const renderStars = (rating) => {
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 >= 0.5;
-        const emptyStars = 5 - Math.ceil(rating);
-        return (
-            <div className="flex items-center gap-0.5">
-                {[...Array(fullStars)].map((_, i) => (
-                    <Star key={`full-${i}`} className="w-3 h-3 fill-amber-400 text-amber-400" />
-                ))}
-                {hasHalfStar && (
-                    <div className="relative w-3 h-3">
-                        <Star className="w-3 h-3 text-gray-300" />
-                        <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
-                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        </div>
-                    </div>
-                )}
-                {[...Array(emptyStars)].map((_, i) => (
-                    <Star key={`empty-${i}`} className="w-3 h-3 fill-gray-300 text-gray-300" />
-                ))}
-            </div>
-        );
-    };
+    // ... renderStars ...
 
     return (
         <section className="py-16 bg-white">
+            {/* ... Header ... */}
             <div className="max-w-7xl mx-auto px-6">
-                {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -120,12 +98,12 @@ export default function Testimonials() {
                 </motion.div>
 
                 {/* Testimonials Carousel */}
-                <div className="relative">
+                <div className="relative px-8 md:px-16">
                     <div className="overflow-hidden">
                         <div
                             className="flex gap-8 transition-transform duration-300 ease-in-out"
                             style={{
-                                transform: `translateX(calc(-${currentIndex * (100 / itemsPerView)}% - ${currentIndex * 2}rem))`
+                                transform: `translateX(calc(-${currentIndex} * ((100% + 2rem) / ${itemsPerView})))`
                             }}
                         >
                             {testimonials.map((testimonial, index) => (
@@ -133,8 +111,7 @@ export default function Testimonials() {
                                     key={testimonial.id}
                                     className="flex-shrink-0"
                                     style={{
-                                        width: `calc(${100 / itemsPerView}% - 1rem)`,
-                                        minWidth: `calc(${100 / itemsPerView}% - 1rem)`
+                                        width: `calc((100% - ${(itemsPerView - 1) * 2}rem) / ${itemsPerView})`
                                     }}
                                 >
                                     <motion.div
@@ -172,22 +149,21 @@ export default function Testimonials() {
                     </div>
 
                     {/* Navigation Arrows */}
-                    {currentIndex > 0 && (
-                        <button
-                            onClick={prevTestimonial}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border-2 border-gray-900 z-10"
-                        >
-                            <ChevronLeft className="w-5 h-5 text-gray-600" />
-                        </button>
-                    )}
-                    {currentIndex < maxIndex && (
-                        <button
-                            onClick={nextTestimonial}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border-2 border-gray-900 z-10"
-                        >
-                            <ChevronRight className="w-5 h-5 text-gray-600" />
-                        </button>
-                    )}
+                    <button
+                        onClick={prevTestimonial}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-gray-900 z-10 transition-all hover:bg-gray-50 text-gray-600 cursor-pointer"
+                        aria-label="Previous testimonial"
+                    >
+                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+
+                    <button
+                        onClick={nextTestimonial}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-gray-900 z-10 transition-all hover:bg-gray-50 text-gray-600 cursor-pointer"
+                        aria-label="Next testimonial"
+                    >
+                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
                 </div>
             </div>
         </section>

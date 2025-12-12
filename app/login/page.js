@@ -16,7 +16,7 @@ function LoginForm() {
     const [successMessage, setSuccessMessage] = useState('');
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { user, isAuthLoading } = useNavigation();
+    const { user, isAuthLoading, setUser } = useNavigation();
 
     useEffect(() => {
         if (!isAuthLoading && user) {
@@ -58,6 +58,8 @@ function LoginForm() {
             toast.success(`Welcome back, ${userName.split(' ')[0]}! 👋`, {
                 duration: 4000,
             });
+
+            setUser(data.user);
 
             router.push('/');
             router.refresh();

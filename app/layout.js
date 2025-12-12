@@ -6,6 +6,8 @@ import { CartProvider } from '@/contexts/CartContext';
 import VisitTracker from '@/components/VisitTracker';
 import AuthModal from '@/components/AuthModal';
 
+import ConsoleSuppressor from '@/components/ConsoleSuppressor';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -23,6 +25,7 @@ export default function RootLayout({ children }) {
                 <NavigationProvider>
                     <CartProvider>
                         <VisitTracker />
+                        <ConsoleSuppressor />
                         <AuthModal />
                         {children}
                         <Toaster

@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Copy, Check, Link2, Share2, Mail, MessageCircle, Info } from 'lucide-react';
+import { Copy, Check, Link2, Share2, Mail, Info } from 'lucide-react';
+import { FaWhatsapp, FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa';
 
 const sources = [
-    { id: 'whatsapp', name: 'WhatsApp', icon: MessageCircle, color: 'bg-green-500' },
-    { id: 'instagram', name: 'Instagram', icon: Share2, color: 'bg-gradient-to-r from-purple-500 to-pink-500' },
-    { id: 'facebook', name: 'Facebook', icon: Share2, color: 'bg-blue-600' },
+    { id: 'whatsapp', name: 'WhatsApp', icon: FaWhatsapp, color: 'bg-green-500' },
+    { id: 'instagram', name: 'Instagram', icon: FaInstagram, color: 'bg-gradient-to-r from-purple-500 to-pink-500' },
+    { id: 'facebook', name: 'Facebook', icon: FaFacebookF, color: 'bg-blue-600' },
+    { id: 'youtube', name: 'YouTube', icon: FaYoutube, color: 'bg-red-600' }, // Replaced Twitter with YouTube
     { id: 'email', name: 'Email', icon: Mail, color: 'bg-gray-600' },
-    { id: 'twitter', name: 'Twitter/X', icon: Share2, color: 'bg-black' },
     { id: 'other', name: 'Other', icon: Link2, color: 'bg-amber-500' },
 ];
 
@@ -16,8 +17,8 @@ const mediums = {
     whatsapp: ['social', 'broadcast', 'group', 'direct'],
     instagram: ['bio', 'story', 'post', 'dm', 'reel'],
     facebook: ['post', 'ad', 'group', 'messenger'],
+    youtube: ['video', 'shorts', 'community', 'description', 'ad'], // Added YouTube mediums
     email: ['newsletter', 'promo', 'welcome', 'transactional'],
-    twitter: ['tweet', 'dm', 'profile'],
     other: ['referral', 'qr_code', 'print', 'other'],
 };
 

@@ -105,45 +105,45 @@ export default function UsersTab() {
                     <table className="w-full">
                         <thead className="bg-gray-50/50">
                             <tr>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">User</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Contact</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Location</th>
-                                <th className="text-left py-3 px-6 text-xs font-medium text-gray-500 uppercase">Joined</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">User</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Contact</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Location</th>
+                                <th className="text-left py-3 px-3 md:px-6 text-[10px] md:text-xs font-medium text-gray-500 uppercase">Joined</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {users.map((user) => (
                                 <tr key={user._id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="py-4 px-6">
+                                    <td className="py-3 md:py-4 px-3 md:px-6">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xs font-bold">
+                                            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xs font-bold shrink-0">
                                                 {user.name.charAt(0).toUpperCase()}
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                                                <p className="text-xs text-gray-500">Age: {user.age}</p>
+                                                <p className="text-xs md:text-sm font-medium text-gray-900">{user.name}</p>
+                                                <p className="text-[10px] md:text-xs text-gray-500">Age: {user.age}</p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6">
+                                    <td className="py-3 md:py-4 px-3 md:px-6">
                                         <div className="space-y-1">
-                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
                                                 <Mail className="w-3 h-3 text-gray-400" />
-                                                {user.email}
+                                                <span className="truncate max-w-[100px] md:max-w-none">{user.email}</span>
                                             </div>
-                                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
                                                 <Phone className="w-3 h-3 text-gray-400" />
                                                 {user.phone}
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6">
-                                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                                    <td className="py-3 md:py-4 px-3 md:px-6">
+                                        <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
                                             <MapPin className="w-3 h-3 text-gray-400" />
                                             {user.city}
                                         </div>
                                     </td>
-                                    <td className="py-4 px-6 text-sm text-gray-500">
+                                    <td className="py-3 md:py-4 px-3 md:px-6 text-[10px] md:text-xs text-gray-500">
                                         <div className="flex items-center gap-2">
                                             <Calendar className="w-3 h-3 text-gray-400" />
                                             {new Date(user.createdAt).toLocaleDateString()}

@@ -3,20 +3,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, Mail, MapPin } from 'lucide-react';
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 export default function Footer() {
     return (
         <footer className="bg-gray-900 text-white">
             {/* Main Footer */}
-                <div className="max-w-7xl mx-auto px-6 py-12">
-                <div className="grid md:grid-cols-4 gap-8">
+            <div className="max-w-7xl mx-auto px-6 py-12">
+                <div className="grid md:grid-cols-3 gap-8">
                     {/* Brand */}
                     <div>
                         <div className="flex items-center mb-4">
                             <div className="relative w-32 h-16">
                                 <Image
-                                    src="/logo.png"
+                                    src="/logo-bg.jpeg"
                                     alt="Timewise Logo"
                                     fill
                                     className="object-contain"
@@ -39,18 +39,7 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Customer Service */}
-                    <div>
-                        <h4 className="font-semibold mb-4">Customer Service</h4>
-                        <ul className="space-y-2 text-gray-400 text-sm">
-                            <li><a href="#" className="hover:text-amber-400 transition-colors">Contact Us</a></li>
-                            <li><a href="#" className="hover:text-amber-400 transition-colors">Track Order</a></li>
-                            <li><a href="#" className="hover:text-amber-400 transition-colors">Returns & Refunds</a></li>
-                            <li><a href="#" className="hover:text-amber-400 transition-colors">FAQs</a></li>
-                        </ul>
-                    </div>
-
-                    {/* Contact */}
+                    {/* Contact - Now merged with relevant parts or just taking up the space */}
                     <div>
                         <h4 className="font-semibold mb-4">Contact</h4>
                         <ul className="space-y-3 text-gray-400 text-sm">
@@ -60,7 +49,7 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center gap-2">
                                 <Mail className="w-4 h-4" />
-                                support@timewise.com
+                                official.timewise.co@gmail.com
                             </li>
                             <li className="flex items-center gap-2">
                                 <MapPin className="w-4 h-4" />
@@ -72,11 +61,11 @@ export default function Footer() {
                             <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
                                 <FaFacebookF className="w-4 h-4" />
                             </a>
-                            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
+                            <a href="https://www.instagram.com/timewise.official" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
                                 <FaInstagram className="w-4 h-4" />
                             </a>
-                            <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
-                                <FaTwitter className="w-4 h-4" />
+                            <a href="https://youtube.com/@timewise-y9j" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-500 transition-colors">
+                                <FaYoutube className="w-4 h-4" />
                             </a>
                         </div>
                     </div>

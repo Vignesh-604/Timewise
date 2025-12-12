@@ -5,13 +5,14 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { User, LogOut, ShoppingBag, FileText } from 'lucide-react';
+import { User, LogOut, ShoppingCart, PackageCheck, Menu, X } from 'lucide-react';
 import { useNavigation } from '@/contexts/NavigationContext';
 import { useCart } from '@/contexts/CartContext';
 import NavigationLink from './NavigationLink';
 import CartDrawer from './CartDrawer';
 
 export default function Navbar() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const { user, setUser, isAuthLoading, startNavigation, endNavigation, setIsAuthLoading } = useNavigation();
     const { setIsCartOpen, cartCount } = useCart();
@@ -25,8 +26,8 @@ export default function Navbar() {
         { href: '/category/sports', label: 'Sports' },
         { href: '/category/kids', label: 'Kids' },
         { href: '/category/metal', label: 'Metal' },
-        { href: '/category/men', label: 'Men' },
-        { href: '/category/women', label: 'Women' },
+        { href: '/category/mens', label: 'Mens' },
+        { href: '/category/womens', label: 'Womens' },
     ];
 
     useEffect(() => {
@@ -38,9 +39,15 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Close sidebar when route changes
+    useEffect(() => {
+        setIsSidebarOpen(false);
+    }, [pathname]);
+
     const handleLogout = async () => {
         try {
             setIsAuthLoading(true);
+            setIsSidebarOpen(false);
             startNavigation('/'); // Show overlay
             await fetch('/api/auth/logout', { method: 'POST' });
             setUser(null);
@@ -62,19 +69,30 @@ export default function Navbar() {
         >
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex justify-between items-center h-16">
-                    {/* Logo */}
-                    <NavigationLink href="/" className="flex items-center">
-                        <div className="relative w-32 h-16">
-                            <Image
-                                src="/logo.png"
-                                alt="Timewise Logo"
-                                fill
-                                className="object-contain"
-                            />
-                        </div>
-                    </NavigationLink>
+                    {/* Left: Mobile Menu & Logo */}
+                    <div className="flex items-center gap-4">
+                        {/* Mobile Menu Button */}
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="md:hidden p-2 -ml-2 text-gray-700 hover:bg-gray-100 rounded-full"
+                        >
+                            <Menu className="w-6 h-6" />
+                        </button>
 
-                    {/* Categories - Centered */}
+                        {/* Logo */}
+                        <NavigationLink href="/" className="flex items-center">
+                            <div className="relative w-32 h-16">
+                                <Image
+                                    src="/logo.png"
+                                    alt="Timewise Logo"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+                        </NavigationLink>
+                    </div>
+
+                    {/* Categories - Centered (Desktop) */}
                     <div className="hidden md:flex flex-1 justify-center mx-8">
                         <div className="flex items-center gap-4">
                             {categories.map((category) => (
@@ -92,8 +110,8 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    {/* Right Actions */}
-                    <div className="flex items-center space-x-4">
+                    {/* Right Actions (Desktop) */}
+                    <div className="hidden md:flex items-center space-x-4">
                         {user && (
                             <>
                                 {/* Orders Button */}
@@ -102,7 +120,7 @@ export default function Navbar() {
                                     title="My Orders"
                                     className={`flex items-center gap-2 p-2 transition-colors group ${pathname === '/orders' ? 'text-amber-500 font-bold' : 'text-gray-700 hover:text-amber-500'}`}
                                 >
-                                    <FileText className={`w-6 h-6 ${pathname === '/orders' ? 'text-amber-500' : ''}`} />
+                                    <PackageCheck className={`w-6 h-6 ${pathname === '/orders' ? 'text-amber-500' : ''}`} />
                                     <span className={`hidden md:inline font-medium text-sm group-hover:text-amber-600 ${pathname === '/orders' ? 'text-amber-500' : ''}`}>Orders</span>
                                 </button>
 
@@ -112,7 +130,7 @@ export default function Navbar() {
                                     className="relative flex items-center gap-2 p-2 text-gray-700 hover:text-amber-500 transition-colors group"
                                 >
                                     <div className="relative">
-                                        <ShoppingBag className="w-6 h-6" />
+                                        <ShoppingCart className="w-6 h-6" />
                                         {cartCount > 0 && (
                                             <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
                                                 {cartCount}
@@ -157,8 +175,156 @@ export default function Navbar() {
                             </div>
                         )}
                     </div>
+
+                    {/* Mobile Right: Cart Only (Users usually want quick access) */}
+                    <div className="flex md:hidden items-center gap-2">
+                        {user && (
+                            <button
+                                onClick={() => setIsCartOpen(true)}
+                                className="relative p-2 text-gray-700"
+                            >
+                                <ShoppingCart className="w-6 h-6" />
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </button>
+                        )}
+                        {/* Auth links for mobile if not logged in */}
+                        {!user && !isAuthLoading && (
+                            <NavigationLink
+                                href="/login"
+                                className="px-3 py-1.5 text-xs font-semibold text-white bg-gray-900 rounded-full"
+                            >
+                                Login
+                            </NavigationLink>
+                        )}
+                    </div>
                 </div>
             </div>
+
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
+            {/* Mobile Sidebar */}
+            <motion.div
+                initial={{ x: '-100%' }}
+                animate={{ x: isSidebarOpen ? 0 : '-100%' }}
+                transition={{ type: 'tween', duration: 0.3 }}
+                className="fixed top-0 left-0 bottom-0 w-[280px] bg-white z-50 shadow-2xl md:hidden flex flex-col"
+            >
+                {/* Sidebar Header */}
+                <div className="p-4 flex items-center justify-between border-b border-gray-100">
+                    <div className="relative w-24 h-12">
+                        <Image
+                            src="/logo.png"
+                            alt="Timewise Logo"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                    <button
+                        onClick={() => setIsSidebarOpen(false)}
+                        className="p-2 hover:bg-gray-100 rounded-full text-gray-500"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Sidebar Content */}
+                <div className="flex-1 overflow-y-auto py-4">
+                    {/* Categories Section */}
+                    <div className="px-6 mb-6">
+                        <p className="text-xs text-gray-500 uppercase font-semibold mb-3">Collections</p>
+                        <div className="space-y-1">
+                            {categories.map((category) => (
+                                <Link
+                                    key={category.href}
+                                    href={category.href}
+                                    onClick={() => setIsSidebarOpen(false)}
+                                    className={`block py-1 text-sm font-medium transition-colors ${pathname === category.href
+                                        ? 'text-amber-500'
+                                        : 'text-gray-700 hover:text-amber-600'
+                                        }`}
+                                >
+                                    {category.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="border-t border-gray-100 my-2" />
+
+                    {/* User Links Section */}
+                    {user && (
+                        <div className="px-6 py-4 space-y-3">
+                            <button
+                                onClick={() => {
+                                    setIsCartOpen(true);
+                                    setIsSidebarOpen(false);
+                                }}
+                                className="flex items-center gap-3 w-full py-2 text-sm font-medium text-gray-700 hover:text-amber-600"
+                            >
+                                <ShoppingCart className="w-5 h-5" />
+                                Cart
+                                {cartCount > 0 && (
+                                    <span className="ml-auto bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    router.push('/orders');
+                                    setIsSidebarOpen(false);
+                                }}
+                                className={`flex items-center gap-3 w-full py-2 text-sm font-medium ${pathname === '/orders' ? 'text-amber-500' : 'text-gray-700 hover:text-amber-600'
+                                    }`}
+                            >
+                                <PackageCheck className="w-5 h-5" />
+                                My Orders
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {/* Sidebar Footer (Logout) */}
+                {user ? (
+                    <div className="p-4 border-t border-gray-100 bg-gray-50">
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center justify-center gap-2 w-full py-2.5 bg-white border border-gray-200 text-red-600 rounded-lg text-sm font-semibold hover:bg-red-50 hover:border-red-100 transition-colors"
+                        >
+                            <LogOut className="w-4 h-4" />
+                            Sign Out
+                        </button>
+                    </div>
+                ) : (
+                    <div className="p-4 border-t border-gray-100 bg-gray-50 space-y-2">
+                        <Link
+                            href="/login"
+                            onClick={() => setIsSidebarOpen(false)}
+                            className="block w-full py-2.5 text-center bg-white border border-gray-200 text-gray-900 rounded-lg text-sm font-semibold hover:bg-gray-50"
+                        >
+                            Log In
+                        </Link>
+                        <Link
+                            href="/register"
+                            onClick={() => setIsSidebarOpen(false)}
+                            className="block w-full py-2.5 text-center bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600 shadow-sm"
+                        >
+                            Sign Up
+                        </Link>
+                    </div>
+                )}
+            </motion.div>
+
             <CartDrawer />
         </motion.nav>
     );
