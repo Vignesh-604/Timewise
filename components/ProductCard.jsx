@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import NavigationLink from './NavigationLink';
@@ -12,6 +13,7 @@ import { useCart } from '@/contexts/CartContext';
 export default function ProductCard({ watch, index = 0 }) {
     const { user, openAuthModal } = useNavigation();
     const { addToCart } = useCart();
+    const [imgSrc, setImgSrc] = useState(getWatchImage(watch.id, watch.image));
     const discountedPrice = watch.price;
     const originalPrice = watch.originalPrice;
     const discount = watch.discount;
@@ -29,13 +31,12 @@ export default function ProductCard({ watch, index = 0 }) {
                 {/* Image Container */}
                 <div className="relative aspect-square overflow-hidden bg-gray-50">
                     <Image
-                        src={getWatchImage(watch.id, watch.image)}
+                        src={imgSrc}
                         alt={watch.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                            // Fallback to stock image on error
-                            e.target.src = 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400';
+                        onError={() => {
+                            setImgSrc('https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400');
                         }}
                     />
 

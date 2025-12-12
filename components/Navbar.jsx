@@ -94,31 +94,35 @@ export default function Navbar() {
 
                     {/* Right Actions */}
                     <div className="flex items-center space-x-4">
-                        {/* Orders Button */}
-                        <button
-                            onClick={() => router.push('/orders')}
-                            title="My Orders"
-                            className={`flex items-center gap-2 p-2 transition-colors group ${pathname === '/orders' ? 'text-amber-500 font-bold' : 'text-gray-700 hover:text-amber-500'}`}
-                        >
-                            <FileText className={`w-6 h-6 ${pathname === '/orders' ? 'text-amber-500' : ''}`} />
-                            <span className={`hidden md:inline font-medium text-sm group-hover:text-amber-600 ${pathname === '/orders' ? 'text-amber-500' : ''}`}>Orders</span>
-                        </button>
+                        {user && (
+                            <>
+                                {/* Orders Button */}
+                                <button
+                                    onClick={() => router.push('/orders')}
+                                    title="My Orders"
+                                    className={`flex items-center gap-2 p-2 transition-colors group ${pathname === '/orders' ? 'text-amber-500 font-bold' : 'text-gray-700 hover:text-amber-500'}`}
+                                >
+                                    <FileText className={`w-6 h-6 ${pathname === '/orders' ? 'text-amber-500' : ''}`} />
+                                    <span className={`hidden md:inline font-medium text-sm group-hover:text-amber-600 ${pathname === '/orders' ? 'text-amber-500' : ''}`}>Orders</span>
+                                </button>
 
-                        {/* Cart Button */}
-                        <button
-                            onClick={() => setIsCartOpen(true)}
-                            className="relative flex items-center gap-2 p-2 text-gray-700 hover:text-amber-500 transition-colors group"
-                        >
-                            <div className="relative">
-                                <ShoppingBag className="w-6 h-6" />
-                                {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </div>
-                            <span className="hidden md:inline font-medium text-sm group-hover:text-amber-600">Cart</span>
-                        </button>
+                                {/* Cart Button */}
+                                <button
+                                    onClick={() => setIsCartOpen(true)}
+                                    className="relative flex items-center gap-2 p-2 text-gray-700 hover:text-amber-500 transition-colors group"
+                                >
+                                    <div className="relative">
+                                        <ShoppingBag className="w-6 h-6" />
+                                        {cartCount > 0 && (
+                                            <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
+                                                {cartCount}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <span className="hidden md:inline font-medium text-sm group-hover:text-amber-600">Cart</span>
+                                </button>
+                            </>
+                        )}
 
                         {/* User */}
                         {isAuthLoading ? (

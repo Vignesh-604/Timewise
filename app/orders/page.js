@@ -10,12 +10,24 @@ import { getWatchImage } from '@/lib/imageHelper';
 import { ShoppingBag, Calendar, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+import { useRouter } from 'next/navigation';
+import { useNavigation } from '@/contexts/NavigationContext';
+
 export default function OrdersPage() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { user, isAuthLoading } = useNavigation();
+    const router = useRouter();
 
     useEffect(() => {
+        if (!isAuthLoading && !user) {
+            router.push('/login');
+            return;
+        }
+
         const fetchOrders = async () => {
+            if (!user) return; // Wait for user to be loaded
+
             try {
                 const res = await fetch('/api/orders');
                 const data = await res.json();
@@ -29,8 +41,18 @@ export default function OrdersPage() {
             }
         };
 
-        fetchOrders();
-    }, []);
+        if (!isAuthLoading) {
+            fetchOrders();
+        }
+    }, [user, isAuthLoading, router]);
+
+    if (isAuthLoading || !user) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+            </div>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-gray-50">
