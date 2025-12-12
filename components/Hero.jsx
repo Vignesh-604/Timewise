@@ -71,30 +71,9 @@ export default function Hero() {
                     >
                         Explore Collection
                     </a>
-                    <a
-                        href="#brands"
-                        className="px-8 py-4 glass-dark text-white rounded-lg font-semibold hover:bg-white/20 transition-all"
-                    >
-                        Learn More
-                    </a>
+
                 </motion.div>
             </div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1, duration: 1 }}
-                className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-            >
-                <motion.div
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                    className="w-6 h-10 border-2 border-white rounded-full flex justify-center"
-                >
-                    <div className="w-1 h-2 bg-white rounded-full mt-2"></div>
-                </motion.div>
-            </motion.div>
         </section>
     );
 }

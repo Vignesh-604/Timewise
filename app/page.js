@@ -23,6 +23,7 @@ export default function Home() {
                     title="Bestsellers"
                     subtitle="Our most loved timepieces"
                     products={bestsellers}
+                    viewAllLink="/category/bestsellers"
                     bgColor="bg-white"
                 />
             </div>
@@ -33,6 +34,7 @@ export default function Home() {
                     title="New Arrivals"
                     subtitle="Fresh styles just landed"
                     products={newArrivals}
+                    viewAllLink="/category/new-arrivals"
                     bgColor="bg-gray-50"
                 />
             </div>
@@ -49,6 +51,7 @@ export default function Home() {
                     title="Automatic Watches"
                     subtitle="Precision engineering at its finest"
                     products={automaticWatches}
+                    viewAllLink="/category/automatic"
                     bgColor="bg-white"
                 />
             </div>

@@ -4,35 +4,37 @@ import { useState, useEffect } from 'react';
 import {
     BarChart3,
     Users,
-    Globe,
+    Globe as GlobeIcon, // Renaming to avoid conflict if needed, or just remove if unused
     Smartphone,
     Monitor,
     Tablet,
     TrendingUp,
     Calendar,
     RefreshCw,
-    MessageCircle,
+    MessageCircle, // unused now for source
     Mail,
-    Share2,
+    Share2, // unused now for source
     Clock,
     Eye
 } from 'lucide-react';
+import { FaWhatsapp, FaInstagram, FaFacebook, FaYoutube, FaTwitter, FaGlobe } from 'react-icons/fa';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const sourceIcons = {
-    whatsapp: { icon: MessageCircle, color: 'bg-green-500' },
-    instagram: { icon: Share2, color: 'bg-gradient-to-r from-purple-500 to-pink-500' },
-    facebook: { icon: Share2, color: 'bg-blue-600' },
+    whatsapp: { icon: FaWhatsapp, color: 'bg-[#25D366]' },
+    instagram: { icon: FaInstagram, color: 'bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888]' }, // Official insta gradient approx
+    facebook: { icon: FaFacebook, color: 'bg-[#1877F2]' },
+    youtube: { icon: FaYoutube, color: 'bg-[#FF0000]' },
+    twitter: { icon: FaTwitter, color: 'bg-[#1DA1F2]' },
     email: { icon: Mail, color: 'bg-gray-600' },
-    twitter: { icon: Share2, color: 'bg-black' },
-    direct: { icon: Globe, color: 'bg-amber-500' },
+    direct: { icon: FaGlobe, color: 'bg-amber-500' },
 };
 
 const deviceIcons = {
     desktop: Monitor,
     mobile: Smartphone,
     tablet: Tablet,
-    unknown: Globe,
+    unknown: GlobeIcon,
 };
 
 export default function AnalyticsDashboard() {
@@ -201,7 +203,7 @@ export default function AnalyticsDashboard() {
                 {/* Traffic Sources */}
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <h3 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <Globe className="w-4 h-4 text-amber-500" />
+                        <GlobeIcon className="w-4 h-4 text-amber-500" />
                         Traffic Sources
                     </h3>
                     <div className="grid grid-cols-1 gap-3">

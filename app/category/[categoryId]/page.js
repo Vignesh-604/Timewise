@@ -16,6 +16,12 @@ const categoryNames = {
     metal: 'Metal Watches',
     men: 'Men\'s Watches',
     women: 'Women\'s Watches',
+    mens: 'Men\'s Watches',
+    womens: 'Women\'s Watches',
+    bestsellers: 'Bestsellers Collection',
+    'new-arrivals': 'New Arrivals',
+    automatic: 'Automatic Watches',
+    all: 'All Watches',
 };
 
 export default function CategoryPage() {
@@ -27,7 +33,7 @@ export default function CategoryPage() {
     return (
         <main className="min-h-screen bg-gray-50">
             <Navbar />
-            
+
             {/* Category Header */}
             <div className="bg-white border-b border-gray-200 pt-24 pb-8">
                 <div className="max-w-7xl mx-auto px-6">
@@ -57,8 +63,8 @@ export default function CategoryPage() {
                 ) : (
                     <div className="text-center py-20">
                         <p className="text-gray-500 text-lg">No watches found in this category.</p>
-                        <a 
-                            href="/" 
+                        <a
+                            href="/"
                             className="mt-4 inline-block text-amber-600 hover:text-amber-700 font-medium"
                         >
                             ← Back to Home

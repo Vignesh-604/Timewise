@@ -20,14 +20,14 @@ export default function Navbar() {
     const pathname = usePathname();
 
     const categories = [
+        { href: '/category/mens', label: 'Mens' },
+        { href: '/category/womens', label: 'Womens' },
+        { href: '/category/kids', label: 'Kids' },
         { href: '/category/classic', label: 'Classic' },
         { href: '/category/luxury', label: 'Luxury' },
         { href: '/category/leather', label: 'Leather' },
         { href: '/category/sports', label: 'Sports' },
-        { href: '/category/kids', label: 'Kids' },
         { href: '/category/metal', label: 'Metal' },
-        { href: '/category/mens', label: 'Mens' },
-        { href: '/category/womens', label: 'Womens' },
     ];
 
     useEffect(() => {
