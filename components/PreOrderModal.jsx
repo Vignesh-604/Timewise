@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, FileText } from 'lucide-react';
 import { formatPrice } from '@/data/watches';
 
-export default function PreOrderModal({ isOpen, onClose, onConfirm, cartItems, total, isLoading }) {
+export default function PreOrderModal({ isOpen, onClose, onConfirm, cartItems, total, originalTotal, isLoading }) {
     if (!isOpen) return null;
 
     return (
@@ -51,6 +51,9 @@ export default function PreOrderModal({ isOpen, onClose, onConfirm, cartItems, t
                                     </div>
                                     <div className="text-right">
                                         <p className="font-medium text-gray-900">{formatPrice(item.price * item.quantity)}</p>
+                                        {item.originalPrice && item.originalPrice > item.price && (
+                                            <p className="text-xs text-gray-400 line-through">{formatPrice(item.originalPrice * item.quantity)}</p>
+                                        )}
                                         <p className="text-xs text-gray-400">{formatPrice(item.price)} each</p>
                                     </div>
                                 </div>
@@ -59,10 +62,22 @@ export default function PreOrderModal({ isOpen, onClose, onConfirm, cartItems, t
 
                         {/* Bill Details */}
                         <div className="bg-gray-50 rounded-xl p-4 space-y-2 mb-6">
+                            {originalTotal && originalTotal > total && (
+                                <div className="flex justify-between text-sm text-gray-400">
+                                    <span>Original Price</span>
+                                    <span className="line-through">{formatPrice(originalTotal)}</span>
+                                </div>
+                            )}
                             <div className="flex justify-between text-sm text-gray-600">
                                 <span>Subtotal</span>
                                 <span>{formatPrice(total)}</span>
                             </div>
+                            {originalTotal && originalTotal > total && (
+                                <div className="flex justify-between text-sm text-green-600 font-medium">
+                                    <span>You Save</span>
+                                    <span>-{formatPrice(originalTotal - total)}</span>
+                                </div>
+                            )}
                             <div className="flex justify-between text-sm text-gray-600">
                                 <span>Taxes (Included)</span>
                                 <span>₹0</span>

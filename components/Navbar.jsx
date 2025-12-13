@@ -128,16 +128,22 @@ export default function Navbar() {
 
                     {/* Right Actions (Desktop) */}
                     <div className="hidden md:flex items-center space-x-4">
-                        {/* About Link - Icon with hover animation (Always Visible) */}
+                        {/* About Link - Always visible, shows text fully when not logged in */}
                         <NavigationLink
                             href="/about"
-                            className="group flex items-center gap-1 p-2 rounded-full hover:bg-amber-50 transition-all"
+                            className={`group flex items-center gap-1 p-2 rounded-full hover:bg-amber-50 transition-all ${!user ? 'px-3' : ''}`}
                             title="About Us"
                         >
                             <Info className={`w-5 h-5 transition-transform group-hover:-translate-y-0.5 ${pathname === '/about' ? 'text-amber-500' : 'text-gray-500 group-hover:text-amber-600'}`} />
-                            <span className={`text-sm font-medium max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[80px] group-hover:opacity-100 transition-all duration-500 ${pathname === '/about' ? 'text-amber-500' : 'text-gray-700 group-hover:text-amber-600'}`}>
-                                About
-                            </span>
+                            {user ? (
+                                <span className={`text-sm font-medium max-w-0 overflow-hidden whitespace-nowrap opacity-0 group-hover:max-w-[80px] group-hover:opacity-100 transition-all duration-500 ${pathname === '/about' ? 'text-amber-500' : 'text-gray-700 group-hover:text-amber-600'}`}>
+                                    About
+                                </span>
+                            ) : (
+                                <span className={`text-sm font-medium ${pathname === '/about' ? 'text-amber-500' : 'text-gray-700 hover:text-amber-600'}`}>
+                                    About Us
+                                </span>
+                            )}
                         </NavigationLink>
 
                         {user && (

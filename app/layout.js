@@ -6,9 +6,11 @@ import { CartProvider } from '@/contexts/CartContext';
 import VisitTracker from '@/components/VisitTracker';
 import AuthModal from '@/components/AuthModal';
 
+import PromoModal from '@/components/PromoModal';
 import ConsoleSuppressor from '@/components/ConsoleSuppressor';
 
 const inter = Inter({ subsets: ['latin'] });
+
 
 export const metadata = {
     metadataBase: new URL('https://timewise-store.vercel.app'), // Replace with your actual domain
@@ -74,6 +76,7 @@ export default function RootLayout({ children }) {
                     <CartProvider>
                         <VisitTracker />
                         <ConsoleSuppressor />
+                        <PromoModal />
                         <AuthModal />
                         {children}
                         <Toaster

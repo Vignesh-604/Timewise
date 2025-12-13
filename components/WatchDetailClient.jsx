@@ -119,7 +119,7 @@ export default function WatchDetailClient({ id }) {
                                         </div>
                                     )}
                                     {watch.discount > 0 && (
-                                        <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded z-10">
+                                        <div className="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded z-10">
                                             {watch.discount}% OFF
                                         </div>
                                     )}

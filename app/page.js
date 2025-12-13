@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+import SaleBanner from '@/components/SaleBanner';
 import Hero from '@/components/Hero';
 import CategoryBar from '@/components/CategoryBar';
 import ProductSection from '@/components/ProductSection';
@@ -14,6 +15,7 @@ export default function Home() {
     return (
         <main className="min-h-screen bg-gray-50">
             <Navbar />
+            <SaleBanner />
             <Hero />
             <CategoryBar />
 

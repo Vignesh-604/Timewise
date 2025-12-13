@@ -123,6 +123,7 @@ export function CartProvider({ children }) {
     };
 
     const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const cartOriginalTotal = cartItems.reduce((total, item) => total + (item.originalPrice || item.price) * item.quantity, 0);
     const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
     return (
@@ -133,6 +134,7 @@ export function CartProvider({ children }) {
             updateQuantity,
             clearCart,
             cartTotal,
+            cartOriginalTotal,
             cartCount,
             isCartOpen,
             setIsCartOpen,

@@ -19,6 +19,7 @@ export default function CartDrawer() {
         removeFromCart,
         updateQuantity,
         cartTotal,
+        cartOriginalTotal,
         clearCart,
         trackEvent
     } = useCart();
@@ -184,7 +185,12 @@ export default function CartDrawer() {
                                                     <p className="text-sm text-gray-500">{item.brand}</p>
                                                 </div>
                                                 <div className="flex items-center justify-between mt-2">
-                                                    <span className="font-bold text-amber-600">{formatPrice(item.price)}</span>
+                                                    <div className="flex flex-col">
+                                                        <span className="font-bold text-amber-600">{formatPrice(item.price)}</span>
+                                                        {item.originalPrice && item.originalPrice > item.price && (
+                                                            <span className="text-xs text-gray-400 line-through">{formatPrice(item.originalPrice)}</span>
+                                                        )}
+                                                    </div>
 
                                                     {/* Quantity Controls */}
                                                     <div className="flex items-center gap-3 bg-white border rounded-full px-2 py-1 shadow-sm">
@@ -222,10 +228,22 @@ export default function CartDrawer() {
                         {!showSuccess && cartItems.length > 0 && (
                             <div className="border-t p-6 bg-gray-50 z-10">
                                 <div className="space-y-3 mb-6">
+                                    {cartOriginalTotal > cartTotal && (
+                                        <div className="flex justify-between text-gray-400">
+                                            <span>Original Price</span>
+                                            <span className="line-through">{formatPrice(cartOriginalTotal)}</span>
+                                        </div>
+                                    )}
                                     <div className="flex justify-between text-gray-600">
                                         <span>Subtotal</span>
                                         <span>{formatPrice(cartTotal)}</span>
                                     </div>
+                                    {cartOriginalTotal > cartTotal && (
+                                        <div className="flex justify-between text-green-600 font-medium">
+                                            <span>You Save</span>
+                                            <span>-{formatPrice(cartOriginalTotal - cartTotal)}</span>
+                                        </div>
+                                    )}
                                     <div className="flex justify-between text-lg font-bold text-gray-900">
                                         <span>Total</span>
                                         <span>{formatPrice(cartTotal)}</span>
@@ -258,6 +276,7 @@ export default function CartDrawer() {
                 onConfirm={handleConfirmPreOrder}
                 cartItems={cartItems}
                 total={cartTotal}
+                originalTotal={cartOriginalTotal}
                 isLoading={isCheckingOut}
             />
         </AnimatePresence>
