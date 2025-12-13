@@ -56,7 +56,7 @@ export default function RegisterPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const { user, isAuthLoading } = useNavigation();
+    const { user, setUser, isAuthLoading } = useNavigation();
 
     useEffect(() => {
         if (!isAuthLoading && user) {
@@ -119,6 +119,7 @@ export default function RegisterPage() {
                 const loginData = await loginRes.json();
 
                 if (loginRes.ok) {
+                    setUser(loginData.user);
                     // Show welcome toast
                     toast.success(`Welcome to Timewise, ${formData.name}! 🎉`, {
                         duration: 4000,
@@ -232,7 +233,6 @@ export default function RegisterPage() {
                                     value={formData.phone}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
-                                    placeholder="9876543210"
                                     pattern="[0-9]{10}"
                                     required
                                 />
