@@ -70,9 +70,25 @@ export async function POST(req) {
                 device = 'desktop';
             }
 
+            // Normalize and Validate Traffic Source
+            const validSources = ['Direct', 'Whatsapp', 'Email', 'Instagram', 'Youtube', 'Facebook'];
+            let source = 'Direct'; // Default
+
+            if (utm_source) {
+                const lowerSource = utm_source.toLowerCase();
+                // Check against valid sources
+                const match = validSources.find(s => s.toLowerCase() === lowerSource);
+                if (match) {
+                    source = match;
+                } else if (lowerSource === 'none') {
+                    source = 'Direct';
+                }
+                // If no match (e.g. random string), it stays 'Direct'
+            }
+
             visit = await Visit.create({
                 sessionId,
-                utm_source: utm_source || 'direct',
+                utm_source: source,
                 utm_medium: utm_medium || 'none',
                 utm_campaign: utm_campaign || 'none',
                 utm_content: utm_content || '',
