@@ -3,7 +3,8 @@ import { getWatchById } from '@/data/watches';
 import WatchDetailClient from '@/components/WatchDetailClient';
 
 export async function generateMetadata({ params }) {
-    const watch = getWatchById(params.id);
+    const { id } = await params;
+    const watch = getWatchById(id);
 
     if (!watch) {
         return {
@@ -30,8 +31,9 @@ export async function generateMetadata({ params }) {
     };
 }
 
-export default function WatchPage({ params }) {
-    const watch = getWatchById(params.id);
+export default async function WatchPage({ params }) {
+    const { id } = await params;
+    const watch = getWatchById(id);
 
     const jsonLd = watch ? {
         '@context': 'https://schema.org',
@@ -59,7 +61,7 @@ export default function WatchPage({ params }) {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             )}
-            <WatchDetailClient id={params.id} />
+            <WatchDetailClient id={id} />
         </>
     );
 }

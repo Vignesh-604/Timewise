@@ -72,6 +72,7 @@ export default function PromoModal() {
                             className="rounded-3xl shadow-2xl w-full h-auto"
                             priority
                         />
+                        <p className="absolute bottom-[4px] right-5 text-[10px] text-gray-900 font-semibold">* Terms and conditions apply</p>
                     </motion.div>
                 </div>
             )}

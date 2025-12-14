@@ -46,22 +46,23 @@ const supportRoles = [
 ];
 
 // Main departments (displayed in bottom row)
+// Main departments (displayed in bottom row)
 const departments = [
-    {
-        name: 'Development',
-        people: ['Prashant Tiwari', 'Suheb Ahmad']
-    },
-    {
-        name: 'Creative',
-        people: ['Anurag Yadav', 'Pradeep Bidare']
-    },
     {
         name: 'Marketing',
         people: ['Darain Hussain', 'Rehan Bagwan', 'Anurag Sharma']
     },
     {
         name: 'Social Media',
-        people: ['Shreya Bhandari', 'Varun Sonar']
+        people: ['Shreya Bhandari', 'Pradeep Bidare', 'Varun Sonar']
+    },
+    {
+        name: 'Development',
+        people: ['Prashant Tiwari', 'Suheb Ahmad']
+    },
+    {
+        name: 'Creative',
+        people: ['Anurag Yadav']
     }
 ];
 

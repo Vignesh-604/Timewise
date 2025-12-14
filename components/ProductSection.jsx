@@ -34,8 +34,10 @@ export default function ProductSection({ title, subtitle, products, viewAllLink 
 
                 {/* Product Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    {products.map((watch, index) => (
-                        <ProductCard key={watch.id} watch={watch} index={index} />
+                    {products.slice(0, products.length >= 8 ? 8 : 4).map((watch, index) => (
+                        <div key={watch.id} className={`${index > 5 ? 'hidden lg:block' : 'block'} contents`}>
+                            <ProductCard watch={watch} index={index} />
+                        </div>
                     ))}
                 </div>
             </div>

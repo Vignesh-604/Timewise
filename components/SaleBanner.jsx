@@ -27,7 +27,7 @@ export default function SaleBanner() {
         <div className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-gray-900">
             <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3 relative">
                 <span className="text-sm md:text-base font-semibold text-center">
-                    🎉 <span className="font-bold">FLASH SALE!</span> Get <span className="font-extrabold">50% OFF</span> on all watches — <span className="underline">14th - 20th December</span> 🎉
+                    🎉 <span className="font-bold">FLASH SALE!</span> Get <span className="font-extrabold">50% OFF*</span> on most watches — <span className="underline">14th - 20th December</span> 🎉
                 </span>
                 <button
                     onClick={handleDismiss}

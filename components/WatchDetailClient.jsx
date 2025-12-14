@@ -1,26 +1,62 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { Star, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Minus, Plus, ShoppingCart, X } from 'lucide-react';
 import { getWatchById, formatPrice, allWatches } from '@/data/watches';
-import { getWatchReviews, calculateAverageRating, getRatingDistribution } from '@/data/reviews';
-import { getWatchImage, getWatchImages } from '@/lib/imageHelper';
+import { calculateAverageRating, getRatingDistribution } from '@/data/reviews'; // Helper functions can still be used
+import { getWatchImage } from '@/lib/imageHelper';
 import ProductCard from '@/components/ProductCard';
 import { useCart } from '@/contexts/CartContext';
 import { useNavigation } from '@/contexts/NavigationContext';
+import toast from 'react-hot-toast';
 
 export default function WatchDetailClient({ id }) {
     const watchId = parseInt(id);
     const watch = getWatchById(watchId);
-    const reviews = getWatchReviews(watchId);
+
+    // State
+    const [reviews, setReviews] = useState([]);
+    const [isReviewsLoading, setIsReviewsLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [sortBy, setSortBy] = useState('recent');
+    const [showReviewForm, setShowReviewForm] = useState(false);
+
+    // Review Form State
+    const [reviewForm, setReviewForm] = useState({
+        headline: '',
+        text: '',
+        rating: 5,
+        userName: ''
+    });
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
     const { addToCart } = useCart();
     const { user, openAuthModal } = useNavigation();
+
+    // Fetch Reviews
+    useEffect(() => {
+        if (!watchId) return;
+
+        const fetchReviews = async () => {
+            try {
+                const res = await fetch(`/api/reviews?watchId=${watchId}`);
+                const data = await res.json();
+                if (data.success) {
+                    setReviews(data.reviews);
+                }
+            } catch (error) {
+                console.error('Failed to fetch reviews', error);
+            } finally {
+                setIsReviewsLoading(false);
+            }
+        };
+
+        fetchReviews();
+    }, [watchId]);
 
     if (!watch) {
         return (
@@ -41,29 +77,75 @@ export default function WatchDetailClient({ id }) {
     const ratingDistribution = getRatingDistribution(reviews);
     const totalReviews = reviews.length;
 
-    // Get related watches (same category, exclude current watch, ensure no duplicates)
-    const seenIds = new Set([watch.id]); // Start with current watch ID
+    // Get related watches
+    const seenIds = new Set([watch.id]);
     const relatedWatches = allWatches
         .filter(w => {
-            // Filter by category and exclude current watch
             if (w.category !== watch.category || w.id === watch.id) return false;
-            // Ensure no duplicates
             if (seenIds.has(w.id)) return false;
             seenIds.add(w.id);
             return true;
         })
         .slice(0, 4);
 
-    // Get image for the watch with fallback
     const watchMainImage = getWatchImage(watch.id, watch.image);
 
     const handleQuantityChange = (delta) => {
         setQuantity(prev => Math.min(3, Math.max(1, prev + delta)));
     };
 
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!user) {
+            openAuthModal();
+            return;
+        }
+
+        // Basic validation
+        if (!reviewForm.headline || !reviewForm.text) {
+            toast.error('Please fill in all fields');
+            return;
+        }
+
+        setIsSubmittingReview(true);
+        try {
+            const res = await fetch('/api/reviews', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    watchId: watch.id,
+                    ...reviewForm,
+                    userName: user.name || 'Timewise User', // Auto-fill name
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                toast.success('Review submitted successfully!');
+                setReviews(prev => [data.review, ...prev]);
+                setShowReviewForm(false);
+                setReviewForm({ headline: '', text: '', rating: 5, userName: '' });
+            } else {
+                toast.error(data.error || 'Failed to submit review');
+            }
+        } catch (error) {
+            toast.error('Something went wrong');
+        } finally {
+            setIsSubmittingReview(false);
+        }
+    };
+
     const sortedReviews = [...reviews].sort((a, b) => {
         if (sortBy === 'recent') {
-            return new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-'));
+            // Check if date is ISO (from DB) or DD/MM/YY (from static)
+            const getDateObj = (dateStr) => {
+                if (dateStr.includes('/')) {
+                    return new Date(dateStr.split('/').reverse().join('-'));
+                }
+                return new Date(dateStr); // Assume ISO or recognizable format
+            };
+            return getDateObj(b.date || b.createdAt) - getDateObj(a.date || a.createdAt);
         }
         return b.rating - a.rating;
     });
@@ -109,7 +191,6 @@ export default function WatchDetailClient({ id }) {
                                         fill
                                         className="object-cover"
                                         onError={(e) => {
-                                            // Fallback to stock image on error
                                             e.target.src = 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400';
                                         }}
                                     />
@@ -119,7 +200,7 @@ export default function WatchDetailClient({ id }) {
                                         </div>
                                     )}
                                     {watch.discount > 0 && (
-                                        <div className="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded z-10">
+                                        <div className={`absolute top-4 right-4 ${watch.discount >= 50 ? 'bg-green-500' : 'bg-blue-600'} text-white text-xs font-bold px-3 py-1 rounded z-10`}>
                                             {watch.discount}% OFF
                                         </div>
                                     )}
@@ -218,10 +299,74 @@ export default function WatchDetailClient({ id }) {
                     <div className="bg-white rounded-lg shadow-sm p-8">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-bold text-gray-900">CUSTOMER REVIEWS</h2>
-                            <button className="bg-gray-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors border-2 border-gray-900">
-                                Write A Review
+                            <button
+                                onClick={() => setShowReviewForm(!showReviewForm)}
+                                className="bg-gray-900 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors border-2 border-gray-900"
+                            >
+                                {showReviewForm ? 'Cancel Review' : 'Write A Review'}
                             </button>
                         </div>
+
+                        {/* Review Form */}
+                        <AnimatePresence>
+                            {showReviewForm && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="overflow-hidden mb-8"
+                                >
+                                    <form onSubmit={handleReviewSubmit} className="bg-gray-50 p-6 rounded-xl space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                                            <div className="flex gap-2">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <button
+                                                        key={`star-select-${star}`}
+                                                        type="button"
+                                                        onClick={() => setReviewForm({ ...reviewForm, rating: star })}
+                                                        className="focus:outline-none transition-transform hover:scale-110"
+                                                    >
+                                                        <Star
+                                                            className={`w-8 h-8 ${star <= reviewForm.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`}
+                                                        />
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Headline</label>
+                                            <input
+                                                type="text"
+                                                value={reviewForm.headline}
+                                                onChange={(e) => setReviewForm({ ...reviewForm, headline: e.target.value })}
+                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                                                placeholder="What's most important to know?"
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Review</label>
+                                            <textarea
+                                                value={reviewForm.text}
+                                                onChange={(e) => setReviewForm({ ...reviewForm, text: e.target.value })}
+                                                rows={4}
+                                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                                                placeholder="What did you like or dislike?"
+                                                required
+                                            />
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmittingReview}
+                                            className="bg-amber-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-amber-600 disabled:opacity-50 transition-colors"
+                                        >
+                                            {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+                                        </button>
+                                    </form>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         {/* Overall Rating */}
                         <div className="grid md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-gray-200">
@@ -266,19 +411,24 @@ export default function WatchDetailClient({ id }) {
 
                         {/* Individual Reviews */}
                         <div className="space-y-6">
-                            {sortedReviews.length > 0 ? (
-                                sortedReviews.map((review) => (
-                                    <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
+                            {isReviewsLoading ? (
+                                <div className="text-center py-12">
+                                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-500 border-t-transparent"></div>
+                                    <p className="mt-2 text-gray-500">Loading reviews...</p>
+                                </div>
+                            ) : sortedReviews.length > 0 ? (
+                                sortedReviews.map((review, idx) => (
+                                    <div key={review._id || review.id || idx} className="border-b border-gray-200 pb-6 last:border-0">
                                         <div className="flex items-start justify-between mb-3">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
                                                     <span className="text-gray-600 font-medium">
-                                                        {review.name.charAt(0)}
+                                                        {(review.name || review.userName || '?').charAt(0)}
                                                     </span>
                                                 </div>
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <span className="font-semibold text-gray-900">{review.name}</span>
+                                                        <span className="font-semibold text-gray-900">{review.name || review.userName}</span>
                                                         {review.verified && (
                                                             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
                                                                 Verified Reviewer
@@ -287,7 +437,9 @@ export default function WatchDetailClient({ id }) {
                                                     </div>
                                                     <div className="flex items-center gap-2 mt-1">
                                                         {renderStars(review.rating)}
-                                                        <span className="text-xs text-gray-500">{review.date}</span>
+                                                        <span className="text-xs text-gray-500">
+                                                            {review.date || (review.createdAt && new Date(review.createdAt).toLocaleDateString())}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
