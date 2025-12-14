@@ -113,7 +113,11 @@ export default function UsersTab() {
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {users.map((user) => (
-                                <tr key={user._id} className="hover:bg-gray-50 transition-colors">
+                                <tr
+                                    key={user._id}
+                                    className="hover:bg-gray-50 transition-colors cursor-pointer"
+                                    onClick={() => window.location.href = `/admin/users/${user._id}`}
+                                >
                                     <td className="py-3 md:py-4 px-3 md:px-6">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xs font-bold shrink-0">

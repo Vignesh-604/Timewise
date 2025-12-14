@@ -71,8 +71,8 @@ export default function RegisterPage() {
 
         // Validation
         const age = parseInt(formData.age);
-        if (age < 18 || age > 24) {
-            setError('Age must be between 18 and 24');
+        if (age < 18 || age > 50) {
+            setError('Age must be between 18 and 50');
             setLoading(false);
             return;
         }
@@ -206,7 +206,7 @@ export default function RegisterPage() {
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
                                     placeholder="ex. 21"
                                     min="18"
-                                    max="24"
+                                    max="50"
                                     required
                                 />
                             </div>
