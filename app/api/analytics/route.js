@@ -28,10 +28,15 @@ export async function GET(req) {
         ]);
         const totalPageViews = pageViewStats.length > 0 ? pageViewStats[0].total : 0;
 
-        // 3. Traffic Sources (Based on Session)
+        // 3. Traffic Sources (Based on Session, Normalized)
         const bySource = await Visit.aggregate([
             { $match: dateFilter },
-            { $group: { _id: '$utm_source', count: { $sum: 1 } } },
+            {
+                $group: {
+                    _id: { $toLower: { $ifNull: ["$utm_source", "direct"] } },
+                    count: { $sum: 1 }
+                }
+            },
             { $sort: { count: -1 } },
             { $limit: 15 }
         ]);
@@ -57,7 +62,7 @@ export async function GET(req) {
             { $unwind: "$pages" },
             { $group: { _id: "$pages.path", count: { $sum: 1 } } },
             { $sort: { count: -1 } },
-            { $limit: 15 }
+            { $limit: 10 }
         ]);
 
         // 7. Daily Sessions Trend
